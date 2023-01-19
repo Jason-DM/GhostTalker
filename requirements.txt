@@ -1,0 +1,6 @@
+brainflow==5.6.0
+numpy==1.21.5
+pandas==1.4.4
+pyautogui==0.9.53
+scikit_learn==1.2.0
+scipy==1.9.1
