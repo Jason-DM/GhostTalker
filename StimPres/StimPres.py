@@ -130,13 +130,19 @@ test_slides =[
 
 # Opens the powerpoint
 slidenum = input()
-fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
-os.startfile(fn)
+#fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
+fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
+
+absolute_path = os.path.dirname(__file__)
+relative_path = "stimulus.pptx"
+full_path = os.path.join(absolute_path, relative_path)
+
+os.system('open ' + full_path)
 
 time.sleep(2)
 
 # Sets the powerpoint to fullscreen
-pyautogui.hotkey('fn','f5')
+pyautogui.hotkey('full_path','f5')
 
 time.sleep(5)
 
@@ -207,12 +213,12 @@ def one_block(slides_place):
 while num_tests > 0:
 
     # pseudo-randomly generated number in range for all phonemes
-    slides_place = random.randint(0, 43);
+    slides_place = random.randint(0, 43)
 
     # test the phoneme if slides counter has not reached zero
     if(slides[slides_place][1] > 0):
-        slides[slides_place][1] -= 1;
-        num_tests -= 1;
+        slides[slides_place][1] -= 1
+        num_tests -= 1
         one_block(slides_place)
 
 board.release_session()
