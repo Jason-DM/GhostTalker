@@ -14,7 +14,10 @@ params = BrainFlowInputParams()
 params.ip_port = 6789
 params.ip_address = "192.168.4.1"
 board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
+
 board.prepare_session()
+
+board.config_board("sampling_rate:250")
 
 #board.prepare_session()
 #board.start_stream()
@@ -129,7 +132,6 @@ test_slides =[
     ]
 
 # Opens the powerpoint
-slidenum = input()
 #fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
 fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
 
@@ -142,7 +144,7 @@ os.system('open ' + full_path)
 time.sleep(2)
 
 # Sets the powerpoint to fullscreen
-pyautogui.hotkey('full_path','f5')
+pyautogui.hotkey(full_path,'f5')
 
 time.sleep(5)
 
@@ -163,6 +165,7 @@ def one_block(slides_place):
     
     time.sleep(3)
     
+    board.start_stream()
     # repeat test procedure 5 times
     for i in range(1,6):
 
@@ -182,20 +185,22 @@ def one_block(slides_place):
         if(current_slide >= 10):
             pyautogui.press(str_current_slide[1])
         pyautogui.press('enter')
+        board.insert_marker(i)
 
         
-        board.start_stream()
-        BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
+        #board.start_stream()
+        #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
         time.sleep(2)
-        data = board.get_board_data()
-        board.stop_stream()
+        #data = board.get_board_data()
+        #board.stop_stream()
         
-        naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
-        DataFilter.write_file(data, naming_convention, 'w')
 
         # 2 second buffer
         #time.sleep(2)               
-    
+    data = board.get_board_data()
+    board.stop_stream()
+    naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
+    DataFilter.write_file(data, naming_convention + '.txt', 'w')
 
     #load slide that indicates the end of testing for current phoneme
     pyautogui.press(next_slide[0])
@@ -208,8 +213,6 @@ def one_block(slides_place):
     return
 
 # generates random phoneme and tests it if it has not reached the testing limit (10 tests for each phoneme)
-
-
 while num_tests > 0:
 
     # pseudo-randomly generated number in range for all phonemes
