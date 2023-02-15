@@ -132,8 +132,13 @@ test_slides =[
     ]
 
 # Opens the powerpoint
+# Cole - File Path
 #fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
+# Jason - File Path
 fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
+# Sam - File Path
+#fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
+
 
 absolute_path = os.path.dirname(__file__)
 relative_path = "stimulus.pptx"
