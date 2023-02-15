@@ -17,8 +17,11 @@ board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
 
 board.prepare_session()
 
-board.config_board("sampling_rate:250")
+board.config_board("~~")
+board.config_board("~6")
 
+board.config_board("//")
+board.config_board("/4")
 #board.prepare_session()
 #board.start_stream()
 #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
@@ -144,7 +147,7 @@ absolute_path = os.path.dirname(__file__)
 relative_path = "stimulus.pptx"
 full_path = os.path.join(absolute_path, relative_path)
 
-os.system('open ' + full_path)
+os.startfile(full_path)
 
 time.sleep(2)
 
@@ -191,7 +194,6 @@ def one_block(slides_place):
             pyautogui.press(str_current_slide[1])
         pyautogui.press('enter')
         board.insert_marker(i)
-
         
         #board.start_stream()
         #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
