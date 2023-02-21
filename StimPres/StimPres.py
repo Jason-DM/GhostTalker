@@ -21,6 +21,7 @@ board.prepare_session()
 board.config_board("~~")
 board.config_board("~6")
 
+# Check board mode, change to Marker mode
 board.config_board("//")
 board.config_board("/4")
 
