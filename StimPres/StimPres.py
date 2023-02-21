@@ -191,7 +191,6 @@ def one_block(slides_place):
         pyautogui.press('enter')
         board.insert_marker(i)
         
-<<<<<<< HEAD
         #board.start_stream()
         #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
         time.sleep(2)
@@ -199,9 +198,7 @@ def one_block(slides_place):
         #data = board.get_board_data()
         #board.stop_stream()
         
-=======
-        time.sleep(2)      
->>>>>>> a4b3f742593faf703c3dcef2f8ced6c47677f2bd
+        time.sleep(2)
 
         # 2 second buffer
         #time.sleep(2)               
