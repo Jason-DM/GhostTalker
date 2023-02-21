@@ -17,9 +17,11 @@ board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
 
 board.prepare_session()
 
+# Check sample rate, change to 250 Hz
 board.config_board("~~")
 board.config_board("~6")
 
+# 
 board.config_board("//")
 board.config_board("/4")
 #board.prepare_session()
@@ -193,6 +195,7 @@ def one_block(slides_place):
         #board.start_stream()
         #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
         time.sleep(2)
+        board.insert_marker(i)
         #data = board.get_board_data()
         #board.stop_stream()
         
