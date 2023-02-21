@@ -158,7 +158,7 @@ def one_block(slides_place):
     str_current_audio_slide = str(current_audio_slide)
 
     #phoneme slides without audio begin at slide 48
-    current_slide = slides_place + 47
+    current_slide = slides_place + 48
     str_current_slide = str(current_slide)
 
     # keypress for the slide number, if slide number has two digits press the digit in the ones place
