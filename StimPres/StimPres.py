@@ -21,7 +21,6 @@ board.prepare_session()
 board.config_board("~~")
 board.config_board("~6")
 
-# 
 board.config_board("//")
 board.config_board("/4")
 
