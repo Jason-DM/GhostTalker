@@ -191,17 +191,19 @@ def one_block(slides_place):
         pyautogui.press('enter')
         board.insert_marker(i)
         
-        #board.start_stream()
-        #BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
         time.sleep(2)
         board.insert_marker(i)
-        #data = board.get_board_data()
-        #board.stop_stream()
         
         time.sleep(2)
 
         # 2 second buffer
         #time.sleep(2)               
+    
+    #load wait slide
+    pyautogui.press(wait_slide[0])
+    pyautogui.press(wait_slide[1])
+    pyautogui.press('enter')
+
     data = board.get_board_data()
     board.stop_stream()
     naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
