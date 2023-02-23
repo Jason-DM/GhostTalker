@@ -141,6 +141,9 @@ absolute_path = os.path.dirname(__file__)
 relative_path = "stimulus.pptx"
 full_path = os.path.join(absolute_path, relative_path)
 
+#Mac OS Start
+#os.start("name" + full_path) # Potential Correct MAC Start
+# PC OS Start
 os.startfile(full_path)
 
 time.sleep(2)
