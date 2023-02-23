@@ -14,20 +14,18 @@ params = BrainFlowInputParams()
 params.ip_port = 6789
 params.ip_address = "192.168.4.1"
 board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
+
 board.prepare_session()
 
-#board.prepare_session()
-#board.start_stream()
-#BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
-#time.sleep(10)
-#data = board.get_board_data()
-#board.stop_stream()
-#board.release_session()
+board.config_board("~~")
+board.config_board("~6")
+
+board.config_board("//")
+board.config_board("/4")
 
 
 num_tests = 88; # 2 blocks for 44 phonemes
 wait_slide = '47' # slide number of wait slide
-next_slide = '48' # slide number of next slide indicator
 begin_test_slide = '2' # slide number of begin test slide
 
 initials = 'SL'
@@ -129,34 +127,50 @@ test_slides =[
     ]
 
 # Opens the powerpoint
-slidenum = input()
-fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
-os.startfile(fn)
+# Cole - File Path
+#fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
+# Jason - File Path
+fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
+# Sam - File Path
+#fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
+
+
+absolute_path = os.path.dirname(__file__)
+relative_path = "stimulus.pptx"
+full_path = os.path.join(absolute_path, relative_path)
+
+#Mac OS Start
+#os.start("name" + full_path) # Potential Correct MAC Start
+# PC OS Start
+os.startfile(full_path)
 
 time.sleep(2)
 
 # Sets the powerpoint to fullscreen
-pyautogui.hotkey('fn','f5')
+pyautogui.hotkey(full_path,'f5')
 
 time.sleep(5)
-
-
 
 # one_block presents visual and auditory stimulus, then conducts five EEG tests separated into 2 second intervals
 # slides_place is the index in the slides of the phoneme being tested
 def one_block(slides_place):
-    # phoneme slides begin at slide 3
-    current_slide = slides_place + 3
+    # phoneme slides with audio begin at slide 3
+    current_audio_slide = slides_place + 3
+    str_current_audio_slide = str(current_audio_slide)
+
+    #phoneme slides without audio begin at slide 48
+    current_slide = slides_place + 47
     str_current_slide = str(current_slide)
 
     # keypress for the slide number, if slide number has two digits press the digit in the ones place
-    pyautogui.press(str_current_slide[0])
-    if(current_slide >= 10):
-        pyautogui.press(str_current_slide[1])
+    pyautogui.press(str_current_audio_slide[0])
+    if(current_audio_slide >= 10):
+        pyautogui.press(str_current_audio_slide[1])
     pyautogui.press('enter')
     
     time.sleep(3)
     
+    board.start_stream()
     # repeat test procedure 5 times
     for i in range(1,6):
 
@@ -176,43 +190,33 @@ def one_block(slides_place):
         if(current_slide >= 10):
             pyautogui.press(str_current_slide[1])
         pyautogui.press('enter')
-
+        board.insert_marker(i)
         
-        board.start_stream()
-        BoardShim.log_message(LogLevels.LEVEL_INFO.value, 'start sleeping in the main thread')
-        time.sleep(2)
-        data = board.get_board_data()
-        board.stop_stream()
-        
-        naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
-        DataFilter.write_file(data, naming_convention, 'w')
+        time.sleep(2)      
 
         # 2 second buffer
         #time.sleep(2)               
-    
+    data = board.get_board_data()
+    board.stop_stream()
+    naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
+    DataFilter.write_file(data, naming_convention + '.txt', 'w')
 
-    #load slide that indicates the end of testing for current phoneme
-    pyautogui.press(next_slide[0])
-    pyautogui.press(next_slide[1])
-    pyautogui.press('enter')
 
     # 3 second buffer
     time.sleep(3)
 
     return
 
-# generates random phoneme and tests it if it has not reached the testing limit (10 tests for each phoneme)
-
-
+# generates random phoneme and tests it if it has not reached the trial limit (10 trials for each phoneme)
 while num_tests > 0:
 
     # pseudo-randomly generated number in range for all phonemes
-    slides_place = random.randint(0, 43);
+    slides_place = random.randint(0, 43)
 
     # test the phoneme if slides counter has not reached zero
     if(slides[slides_place][1] > 0):
-        slides[slides_place][1] -= 1;
-        num_tests -= 1;
+        slides[slides_place][1] -= 1
+        num_tests -= 1
         one_block(slides_place)
 
 board.release_session()
