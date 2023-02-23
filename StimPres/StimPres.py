@@ -130,9 +130,9 @@ test_slides =[
 # Cole - File Path
 #fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
 # Jason - File Path
-fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
+#fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
 # Sam - File Path
-#fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
+fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
 
 
 absolute_path = os.path.dirname(__file__)
@@ -159,7 +159,7 @@ def one_block(slides_place):
     str_current_audio_slide = str(current_audio_slide)
 
     #phoneme slides without audio begin at slide 48
-    current_slide = slides_place + 47
+    current_slide = slides_place + 48
     str_current_slide = str(current_slide)
 
     # keypress for the slide number, if slide number has two digits press the digit in the ones place
@@ -215,8 +215,8 @@ while num_tests > 0:
 
     # test the phoneme if slides counter has not reached zero
     if(slides[slides_place][1] > 0):
-        slides[slides_place][1] -= 1
-        num_tests -= 1
+        slides[slides_place][1] -= 2
+        num_tests -= 2
         one_block(slides_place)
 
 board.release_session()
