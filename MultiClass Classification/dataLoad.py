@@ -19,7 +19,11 @@
 # import basic modules
 import numpy as np
 import scipy as sp
+from scipy import fft
+from scipy.fft import fft, fftfreq
+from scipy import signal
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from supportFunctions import featureExtraction, eegFeatureExtraction, eegFeatureReducer, balancedMatrix
 
@@ -37,12 +41,14 @@ from sklearn.neural_network import MLPClassifier
 
 # TODO: I probably will use different parameters...
 print('Setting parameters...')
-fs = 200  # features per second (Hz)
-pcti = 99.95  # amplitude percent
-lowcut = 1  # filter lower bound (Hz)
-highcut = (np.floor(fs/2))  # filter upper bound (Hz)
-featureNumber = 3  # number of features to retain
+FS = 250  # samples per second (Hz)
+# pcti = 99.95  # amplitude percent
+# lowcut = 1  # filter lower bound (Hz)
+# highcut = (np.floor(fs/2))  # filter upper bound (Hz)
+# featureNumber = 3  # number of features to retain
 N = 4  # value for N-fold cross-validation
+SAMPLE_RATE = 500  # Hz (subject to change)
+NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 
 # %%
 # Processing all the files into the feature and label matricies
@@ -50,20 +56,39 @@ N = 4  # value for N-fold cross-validation
 # TODO: Need to read all the file names using a for loop from another folder
 # TODO: Right now just using the only available dataset to build the process
 # for one element
-nameFile = 'test_data_11_29_22.txt'
+nameFile = 'SL5_3.txt'
 
 # load data
 print('Loading datasets...')
 df = pd.read_csv(nameFile, skiprows=4)
-# Transpose to get channels as rows
-df = df.T
+N_SAMPLES = df.shape[0]
+# Only using the 16 channles as features
+# df = df[df.columns[1:17]]
+# For each column, do
 
+# for col in df.columns:
+#     yf = fft(df[df[col]])
+
+# Goal for Today:
+# Build tunable FFT
+yf = fft(np.array(df[df.columns[2]]))
+xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
+plt.plot(xf, np.abs(yf))
+plt.show()
+
+
+# So do I extrapolate using
+# Transpose in the end to get columns as rows
+# to then concat together
+# df.T
+#
 # Discretize each channel
 # TODO: QUESTION: Will each element have the same size?
 # TODO: QUESTION: How many seconds between sample seconds?
 # TODO: QUESTION: Only using the 16 channels or accel and other as well?
 
-
+# TODO: Should I remove samples if the sum of
+# their acceleration data too high?
 # %%
 # # perform feature extraction
 # print('Extracting features...')
@@ -93,7 +118,6 @@ df = df.T
 
 # targets = np.hstack([t0, t1])
 # y = np.transpose(np.ravel(targets))
-
 
 # # compare classifiers
 # print('Running classifiers...')

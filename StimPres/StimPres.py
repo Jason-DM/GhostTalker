@@ -17,9 +17,11 @@ board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
 
 board.prepare_session()
 
+# Check sample rate, change to 250 Hz
 board.config_board("~~")
 board.config_board("~6")
 
+# Check board mode, change to Marker mode
 board.config_board("//")
 board.config_board("/4")
 
@@ -192,10 +194,19 @@ def one_block(slides_place):
         pyautogui.press('enter')
         board.insert_marker(i)
         
-        time.sleep(2)      
+        time.sleep(2)
+        board.insert_marker(i)
+        
+        time.sleep(2)
 
         # 2 second buffer
         #time.sleep(2)               
+    
+    #load wait slide
+    pyautogui.press(wait_slide[0])
+    pyautogui.press(wait_slide[1])
+    pyautogui.press('enter')
+
     data = board.get_board_data()
     board.stop_stream()
     naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
