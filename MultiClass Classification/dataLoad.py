@@ -24,6 +24,8 @@ from scipy.fft import fft, fftfreq
 from scipy import signal
 import pandas as pd
 import matplotlib.pyplot as plt
+import os #used for File Loading
+import csv #used to Change from txt to csv
 
 from supportFunctions import featureExtraction, eegFeatureExtraction, eegFeatureReducer, balancedMatrix
 
@@ -57,8 +59,16 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # TODO: Right now just using the only available dataset to build the process
 # for one element
 nameFile = 'SL5_3.txt'
-
-# load data
+filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
+output_file = 0
+input_file = 0
+# load data-file path-Convert to CSV!!!
+for filename in os.listdir(folder_path):
+    if filename.endswith(".txt"):  # Open File as txt
+        file_path = os.path.join(folder_path, filename)
+        with open(file_path, "r") as input_file:
+            # What do we want to do with Loaded file? Change to CSV?
+            
 print('Loading datasets...')
 df = pd.read_csv(nameFile, skiprows=4)
 N_SAMPLES = df.shape[0]
