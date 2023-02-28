@@ -142,6 +142,7 @@ relative_path = "stimulus.pptx"
 full_path = os.path.join(absolute_path, relative_path)
 
 #Mac OS Start
+
 #os.start("name" + full_path) # Potential Correct MAC Start
 # PC OS Start
 os.startfile(full_path)
@@ -170,7 +171,7 @@ def one_block(slides_place):
         pyautogui.press(str_current_audio_slide[1])
     pyautogui.press('enter')
     
-    time.sleep(3)
+    time.sleep(2)
     
     board.start_stream()
     # repeat test procedure 5 times
@@ -214,7 +215,7 @@ def one_block(slides_place):
 
 
     # 3 second buffer
-    time.sleep(3)
+    time.sleep(1)
 
     return
 
