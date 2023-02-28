@@ -62,9 +62,9 @@ filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
 output_file = 0
 input_file = 0
 # load data-file path-Convert to CSV!!!
-for filename in os.listdir(folder_path):
+for filename in os.listdir(filePath):
     if filename.endswith(".txt"):  # Open File as txt
-        file_path = os.path.join(folder_path, filename)
+        file_path = os.path.join(filePath, filename)
         with open(file_path, "r") as input_file:
             # What do we want to do with Loaded file? Change to CSV?
             
