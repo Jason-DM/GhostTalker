@@ -56,13 +56,11 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # TODO: Right now just using the only available dataset to build the process
 # for one element
 nameFile = 'test_data_11_29_22.txt'
-df = pd.read_csv('test_data_11_29_22.txt', sep='\t', skiprows=4)
-df.to_csv('my_file.csv', header=None)
+df = pd.read_csv(nameFile, sep=',', skiprows=4)
 
 # load data
-print('Loading datasets...')
-np.loadtxt()
-df = pd.read_csv(nameFile, skiprows=4)
+nameFile = 'test_data_11_29_22.txt'
+df = pd.read_csv(nameFile, sep=',', skiprows=4)
 N_SAMPLES = df.shape[0]
 # Only using the 16 channles as features
 df = df[df.columns[1:17]]
