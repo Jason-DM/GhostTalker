@@ -17,9 +17,11 @@ board = BoardShim(BoardIds.CYTON_DAISY_WIFI_BOARD, params)
 
 board.prepare_session()
 
+# Check sample rate, change to 250 Hz
 board.config_board("~~")
 board.config_board("~6")
 
+# Check board mode, change to Marker mode
 board.config_board("//")
 board.config_board("/4")
 
@@ -130,9 +132,9 @@ test_slides =[
 # Cole - File Path
 #fn = r"C:\Users\dchel\source\repos\StimPres\StimPres\stimulus.pptx"
 # Jason - File Path
-fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
+#fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
 # Sam - File Path
-#fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
+fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
 
 
 absolute_path = os.path.dirname(__file__)
@@ -140,6 +142,7 @@ relative_path = "stimulus.pptx"
 full_path = os.path.join(absolute_path, relative_path)
 
 #Mac OS Start
+
 #os.start("name" + full_path) # Potential Correct MAC Start
 # PC OS Start
 os.startfile(full_path)
@@ -159,7 +162,7 @@ def one_block(slides_place):
     str_current_audio_slide = str(current_audio_slide)
 
     #phoneme slides without audio begin at slide 48
-    current_slide = slides_place + 47
+    current_slide = slides_place + 48
     str_current_slide = str(current_slide)
 
     # keypress for the slide number, if slide number has two digits press the digit in the ones place
@@ -168,7 +171,7 @@ def one_block(slides_place):
         pyautogui.press(str_current_audio_slide[1])
     pyautogui.press('enter')
     
-    time.sleep(3)
+    time.sleep(2)
     
     board.start_stream()
     # repeat test procedure 5 times
@@ -192,10 +195,19 @@ def one_block(slides_place):
         pyautogui.press('enter')
         board.insert_marker(i)
         
-        time.sleep(2)      
+        time.sleep(2)
+        board.insert_marker(i)
+        
+        time.sleep(2)
 
         # 2 second buffer
         #time.sleep(2)               
+    
+    #load wait slide
+    pyautogui.press(wait_slide[0])
+    pyautogui.press(wait_slide[1])
+    pyautogui.press('enter')
+
     data = board.get_board_data()
     board.stop_stream()
     naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
@@ -203,7 +215,7 @@ def one_block(slides_place):
 
 
     # 3 second buffer
-    time.sleep(3)
+    time.sleep(1)
 
     return
 
@@ -215,8 +227,8 @@ while num_tests > 0:
 
     # test the phoneme if slides counter has not reached zero
     if(slides[slides_place][1] > 0):
-        slides[slides_place][1] -= 1
-        num_tests -= 1
+        slides[slides_place][1] -= 2
+        num_tests -= 2
         one_block(slides_place)
 
 board.release_session()
