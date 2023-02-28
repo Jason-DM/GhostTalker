@@ -24,6 +24,8 @@ from scipy.fft import fft, fftfreq
 from scipy import signal
 import pandas as pd
 import matplotlib.pyplot as plt
+import os #used for File Loading
+import csv #used to Change from txt to csv
 
 from supportFunctions import featureExtraction, eegFeatureExtraction, eegFeatureReducer, balancedMatrix
 
@@ -55,6 +57,17 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # TODO: Need to read all the file names using a for loop from another folder
 # TODO: Right now just using the only available dataset to build the process
 # for one element
+# nameFile = 'SL5_3.txt'
+filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
+output_file = 0
+input_file = 0
+# load data-file path-Convert to CSV!!!
+for filename in os.listdir(filePath):
+    if filename.endswith(".txt"):  # Open File as txt
+        file_path = os.path.join(filePath, filename)
+        with open(file_path, "r") as input_file:
+            # What do we want to do with Loaded file? Change to CSV?
+            
 nameFile = 'test_data_11_29_22.txt'
 df = pd.read_csv(nameFile, sep=',', skiprows=4)
 
