@@ -43,13 +43,12 @@ from sklearn.neural_network import MLPClassifier
 
 # TODO: I probably will use different parameters...
 print('Setting parameters...')
-FS = 250  # samples per second (Hz)
 # pcti = 99.95  # amplitude percent
 # lowcut = 1  # filter lower bound (Hz)
 # highcut = (np.floor(fs/2))  # filter upper bound (Hz)
 # featureNumber = 3  # number of features to retain
 N = 4  # value for N-fold cross-validation
-SAMPLE_RATE = 500  # Hz (subject to change)
+SAMPLE_RATE = 250  # Hz (subject to change)
 NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 
 # %%
@@ -58,7 +57,7 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # TODO: Need to read all the file names using a for loop from another folder
 # TODO: Right now just using the only available dataset to build the process
 # for one element
-nameFile = 'SL5_3.txt'
+# nameFile = 'SL5_3.txt'
 filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
 output_file = 0
 input_file = 0
@@ -69,124 +68,133 @@ for filename in os.listdir(folder_path):
         with open(file_path, "r") as input_file:
             # What do we want to do with Loaded file? Change to CSV?
             
+nameFile = 'test_data_11_29_22.txt'
+df = pd.read_csv('test_data_11_29_22.txt', sep='\t', skiprows=4)
+df.to_csv('my_file.csv', header=None)
+
+# load data
 print('Loading datasets...')
+np.loadtxt()
 df = pd.read_csv(nameFile, skiprows=4)
 N_SAMPLES = df.shape[0]
 # Only using the 16 channles as features
-# df = df[df.columns[1:17]]
-# For each column, do
+df = df[df.columns[1:17]]
+# For each column transform into feature vector
+feature_vector = []
+for col_index, col_name in enumerate(df.columns):
+    window_size = np.floor(df.shape[0]/2)
+    for windows in range(NUM_WINDOWS):
+        window_number = windows+1
+        feature_vector.append(np.mean(df.iloc[windows*window_size:(windows+1)
+                                              * window_size:, col_index]))
 
-# for col in df.columns:
-#     yf = fft(df[df[col]])
+    # Goal for Today:
+    # Build tunable FFT
+    # yf = fft(np.array(df[df.columns[2]]))
+    # xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
+    # plt.plot(xf, np.abs(yf))
+    # plt.show()
 
-# Goal for Today:
-# Build tunable FFT
-yf = fft(np.array(df[df.columns[2]]))
-xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
-plt.plot(xf, np.abs(yf))
-plt.show()
+    # So do I extrapolate using
+    # Transpose in the end to get columns as rows
+    # to then concat together
+    # df.T
+    #
+    # Discretize each channel
+    # TODO: QUESTION: Will each element have the same size?
+    # TODO: QUESTION: How many seconds between sample seconds?
+    # TODO: QUESTION: Only using the 16 channels or accel and other as well?
 
+    # TODO: Should I remove samples if the sum of
+    # their acceleration data too high?
+    # %%
+    # # perform feature extraction
+    # print('Extracting features...')
+    # featureMatrixA = eegFeatureExtraction(df1, fs, lowcut, highcut, pcti)
+    # #featureMatrixB = eegFeatureExtraction(df2, fs, lowcut, highcut, pcti)
 
-# So do I extrapolate using
-# Transpose in the end to get columns as rows
-# to then concat together
-# df.T
-#
-# Discretize each channel
-# TODO: QUESTION: Will each element have the same size?
-# TODO: QUESTION: How many seconds between sample seconds?
-# TODO: QUESTION: Only using the 16 channels or accel and other as well?
+    # # perform feature selection
+    # print('Selecting features...')
+    # topFeatures = eegFeatureReducer(featureMatrixA, featureMatrixB, featureNumber)
 
-# TODO: Should I remove samples if the sum of
-# their acceleration data too high?
-# %%
-# # perform feature extraction
-# print('Extracting features...')
-# featureMatrixA = eegFeatureExtraction(df1, fs, lowcut, highcut, pcti)
-# #featureMatrixB = eegFeatureExtraction(df2, fs, lowcut, highcut, pcti)
+    # featureMatrixA = np.squeeze(featureMatrixA[:, topFeatures])
+    # featureMatrixB = np.squeeze(featureMatrixB[:, topFeatures])
 
-# # perform feature selection
-# print('Selecting features...')
-# topFeatures = eegFeatureReducer(featureMatrixA, featureMatrixB, featureNumber)
+    # t0 = np.zeros(np.shape(featureMatrixA)[0])
+    # t1 = np.ones(np.shape(featureMatrixB)[0])
 
-# featureMatrixA = np.squeeze(featureMatrixA[:, topFeatures])
-# featureMatrixB = np.squeeze(featureMatrixB[:, topFeatures])
+    # totalLength = np.array([len(t0), len(t1)])
 
-# t0 = np.zeros(np.shape(featureMatrixA)[0])
-# t1 = np.ones(np.shape(featureMatrixB)[0])
+    # # prepare data for classification
+    # print('Preparing for classification...')
+    # s0 = balancedMatrix(featureMatrixA, totalLength)
+    # s1 = balancedMatrix(featureMatrixB, totalLength)
 
-# totalLength = np.array([len(t0), len(t1)])
+    # X = np.vstack([s0, s1])
+    # t0 = 0*np.ones([1, len(s0)])
+    # t1 = 1*np.ones([1, len(s1)])
 
-# # prepare data for classification
-# print('Preparing for classification...')
-# s0 = balancedMatrix(featureMatrixA, totalLength)
-# s1 = balancedMatrix(featureMatrixB, totalLength)
+    # targets = np.hstack([t0, t1])
+    # y = np.transpose(np.ravel(targets))
 
-# X = np.vstack([s0, s1])
-# t0 = 0*np.ones([1, len(s0)])
-# t1 = 1*np.ones([1, len(s1)])
+    # # compare classifiers
+    # print('Running classifiers...')
+    # clf = QuadraticDiscriminantAnalysis()
+    # print('QDA/LDA Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
 
-# targets = np.hstack([t0, t1])
-# y = np.transpose(np.ravel(targets))
+    # clf = LogisticRegression(random_state=0)
+    # print('Logistic Regression Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
 
-# # compare classifiers
-# print('Running classifiers...')
-# clf = QuadraticDiscriminantAnalysis()
-# print('QDA/LDA Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
+    # clf = GaussianNB()
+    # print('Naive Bayes Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
 
-# clf = LogisticRegression(random_state=0)
-# print('Logistic Regression Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
+    # clf = SVC(gamma=2, C=1)
+    # print('Linear SVM Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
 
-# clf = GaussianNB()
-# print('Naive Bayes Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
+    # clf = AdaBoostClassifier(n_estimators=1000, random_state=0)
+    # print('AdaBoost Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
 
-# clf = SVC(gamma=2, C=1)
-# print('Linear SVM Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
-
-# clf = AdaBoostClassifier(n_estimators=1000, random_state=0)
-# print('AdaBoost Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
-
-# clf = MLPClassifier(alpha=2, max_iter=100)
-# print('MLP Results: ')
-# scores = cross_val_score(clf, X, y, cv=N)
-# print("Accuracy: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
-# print("F1 Score: %0.2f (+/- %0.2f)" %
-#       (scores.mean()-.01, scores.std()+.01 * 2))
-# #clf.fit(X, y)
+    # clf = MLPClassifier(alpha=2, max_iter=100)
+    # print('MLP Results: ')
+    # scores = cross_val_score(clf, X, y, cv=N)
+    # print("Accuracy: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+    # print("F1 Score: %0.2f (+/- %0.2f)" %
+    #       (scores.mean()-.01, scores.std()+.01 * 2))
+    # #clf.fit(X, y)
