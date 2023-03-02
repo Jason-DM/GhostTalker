@@ -26,6 +26,14 @@ board.config_board("//")
 board.config_board("/4")
 
 
+for i in range(1,9):
+    board.config_board("x" + str(i) + "000000X")
+
+daisy_channels = "QWERTYUI"
+
+for i in range(0,8):
+    board.config_board("x" + daisy_channels[i] + "000000X")
+
 num_tests = 88; # 2 blocks for 44 phonemes
 wait_slide = '47' # slide number of wait slide
 begin_test_slide = '2' # slide number of begin test slide
@@ -197,8 +205,6 @@ def one_block(slides_place):
         
         time.sleep(2)
         board.insert_marker(i)
-        
-        time.sleep(2)
 
         # 2 second buffer
         #time.sleep(2)               
