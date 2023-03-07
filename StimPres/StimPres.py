@@ -209,7 +209,6 @@ def one_block(slides_place):
 
         # 2 second buffer
         #time.sleep(2)               
-    
     #load wait slide
     pyautogui.press(wait_slide[0])
     pyautogui.press(wait_slide[1])
@@ -217,12 +216,14 @@ def one_block(slides_place):
 
     data = board.get_board_data()
     board.stop_stream()
-    naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
+    naming_convention = initials + '_' + str(slides_place) +'_1' 
+    # Old Naming Convention:
+    # naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
     DataFilter.write_file(data, naming_convention + '.txt', 'w')
 
 
-    # 3 second buffer
-    time.sleep(1)
+    # 2 second buffer
+    time.sleep(2)
 
     return
 
