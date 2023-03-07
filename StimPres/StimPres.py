@@ -150,8 +150,8 @@ relative_path = "stimulus.pptx"
 full_path = os.path.join(absolute_path, relative_path)
 
 #Mac OS Start
-
 #os.start("name" + full_path) # Potential Correct MAC Start
+
 # PC OS Start
 os.startfile(full_path)
 
@@ -183,6 +183,7 @@ def one_block(slides_place):
     
     board.start_stream()
     # repeat test procedure 5 times
+    # Test Procedure Change from 6 to 31
     for i in range(1,6):
 
         # test_slides incremented by 1
