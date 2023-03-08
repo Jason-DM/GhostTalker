@@ -216,7 +216,7 @@ def one_block(slides_place):
 
     data = board.get_board_data()
     board.stop_stream()
-    naming_convention = initials + '_' + str(slides_place) +'_1' 
+    naming_convention = initials + '_' + str(slides_place) +'_B2' 
     # Old Naming Convention:
     # naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
     DataFilter.write_file(data, naming_convention + '.txt', 'w')
