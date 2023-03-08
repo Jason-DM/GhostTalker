@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds, BrainFlowPresets, LogLevels
 from brainflow.data_filter import DataFilter
+from playsound import playsound
 
 
 BoardShim.enable_dev_board_logger()
@@ -40,7 +41,8 @@ begin_test_slide = '2' # slide number of begin test slide
 
 initials = 'SL'
 
-# Corresponds to slides 3-46
+# Corresponds to slides 3-4647
+
 slides =[
     ['i_colon', 2],
     ['I', 2],
@@ -178,6 +180,7 @@ def one_block(slides_place):
     if(current_audio_slide >= 10):
         pyautogui.press(str_current_audio_slide[1])
     pyautogui.press('enter')
+    playsound('audio/slide' + str(current_audio_slide) + '.mp3')
     
     time.sleep(2)
     
@@ -245,4 +248,3 @@ board.release_session()
 for i in range(0,43):
 
     print(test_slides[i][1])
-
