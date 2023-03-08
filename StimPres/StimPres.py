@@ -25,6 +25,15 @@ board.config_board("~6")
 board.config_board("//")
 board.config_board("/4")
 
+#Set gain for all eeg channels to 1
+for i in range(1,9):
+    board.config_board("x" + str(i) + "000000X")
+
+#Channels 9 through 16 use alphabet characters for firmware
+daisy_channels = "QWERTYUI"
+for i in range(0,8):
+    board.config_board("x" + daisy_channels[i] + "000000X")
+
 
 num_tests = 88; # 2 blocks for 44 phonemes
 wait_slide = '47' # slide number of wait slide
@@ -170,7 +179,7 @@ def one_block(slides_place):
         pyautogui.press(str_current_audio_slide[1])
     pyautogui.press('enter')
     
-    time.sleep(3)
+    time.sleep(2)
     
     board.start_stream()
     # repeat test procedure 5 times
@@ -210,11 +219,9 @@ def one_block(slides_place):
     data = board.get_board_data()
     board.stop_stream()
     naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
-    DataFilter.write_file(data, naming_convention + '.txt', 'w')
-
-
-    # 3 second buffer
-    time.sleep(3)
+    #ch_names = BoardShim.get_eeg_channels(BoardIds.CYTON_DAISY_WIFI_BOARD.value)
+    #DataFilter.write_file(ch_names, naming_convention + '.txt', 'w')
+    DataFilter.write_file(data, naming_convention + '.txt', 'w')   
 
     return
 
