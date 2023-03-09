@@ -144,7 +144,7 @@ test_slides =[
 # Jason - File Path
 #fn = "Users/jason/Documents/Github/StimPres/stimulus.pptx"
 # Sam - File Path
-fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
+#fn = "C:\GitHub\GhostTalker\StimPres\stimulus.pptx"
 
 
 absolute_path = os.path.dirname(__file__)
@@ -175,12 +175,17 @@ def one_block(slides_place):
     current_slide = slides_place + 48
     str_current_slide = str(current_slide)
 
+    #audio file path
+    audio_path = 'slide' + str(current_audio_slide) + '.mp3'
+    full_audio_path = os.path.join(absolute_path, audio_path)
+
     # keypress for the slide number, if slide number has two digits press the digit in the ones place
     pyautogui.press(str_current_audio_slide[0])
     if(current_audio_slide >= 10):
         pyautogui.press(str_current_audio_slide[1])
-    pyautogui.press('enter')
-    playsound('audio/slide' + str(current_audio_slide) + '.mp3')
+    pyautogui.press('enter') 
+
+    playsound(full_audio_path)
     
     time.sleep(2)
     
