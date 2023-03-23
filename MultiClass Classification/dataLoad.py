@@ -65,10 +65,14 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 #     if filename.endswith(".txt"):  # Open File as txt
 #         file_path = os.path.join(filePath, filename)
 #         with open(file_path, "r") as input_file:
-#             # What do we want to do with Loaded file? Change to CSV?
 
-nameFile = 'test_data_11_29_22.txt'
-df = pd.read_csv(nameFile, sep=',', skiprows=4)
+
+# TODO: write fxn to return the following
+#
+# filenameList = ['test_data_11_29_22.txt'....]
+# background = 'background.txt'
+# phoneme = [1....]
+
 
 # load data
 nameFile = 'test_data_11_29_22.txt'
@@ -80,6 +84,7 @@ df = df[df.columns[1:17]]
 # TODO: Slice data from markers
 # For each column transform into feature vector
 feature_vector = []
+# TODO: Write this as functions in a class
 for col_index, col_name in enumerate(df.columns):
     window_size = np.floor(df.shape[0]/2)
     for windows in range(NUM_WINDOWS):
@@ -87,7 +92,7 @@ for col_index, col_name in enumerate(df.columns):
         feature_vector.append(np.mean(df.iloc[windows*window_size:(windows+1)
                                               * window_size:, col_index]))
 
-    # Goal for Today:
+    # TODO: Write a function for frequency filtering
     # Build tunable FFT
     # yf = fft(np.array(df[df.columns[2]]))
     # xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
