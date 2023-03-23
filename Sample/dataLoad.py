@@ -1,3 +1,4 @@
+# %%
 #!/usr/bin/env python3
 # coding:utf-8
 
@@ -140,3 +141,11 @@ scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
 print("F1 Score: %0.2f (+/- %0.2f)" %
       (scores.mean()-.01, scores.std()+.01 * 2))
 #clf.fit(X, y)
+
+# %%
+svm = SVC(gamma=2, C=1)
+# Fitting Model
+svm.fit(X, y)
+y_pred = svm.predict(X)
+
+# %%
