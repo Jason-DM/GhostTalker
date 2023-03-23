@@ -55,8 +55,7 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # Processing all the files into the feature and label matricies
 
 # TODO: Need to read all the file names using a for loop from another folder
-# TODO: Right now just using the only available dataset to build the process
-# for one element
+
 # nameFile = 'SL5_3.txt'
 # filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
 # output_file = 0
@@ -95,18 +94,6 @@ for col_index, col_name in enumerate(df.columns):
     # plt.plot(xf, np.abs(yf))
     # plt.show()
 
-    # So do I extrapolate using
-    # Transpose in the end to get columns as rows
-    # to then concat together
-    # df.T
-    #
-    # Discretize each channel
-    # TODO: QUESTION: Will each element have the same size?
-    # TODO: QUESTION: How many seconds between sample seconds?
-    # TODO: QUESTION: Only using the 16 channels or accel and other as well?
-
-    # TODO: Should I remove samples if the sum of
-    # their acceleration data too high?
     # %%
     # # perform feature extraction
     # print('Extracting features...')
