@@ -119,16 +119,17 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     b, a = butter(order, [low, high], btype='band')
     return b, a
 
-def get_filenames(folder_path):
-    file_names = []
+def get_filepaths(folder_path):
+    file_paths = []
     phoneme_labels = []
     bg_sample = ""
     for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path,filename)
         if filename.endswith("_BC367"):
-            bg_sample = filename
+            bg_sample = file_path
         else:
-            file_names.append(filename)
-            file_names.append(extract_middle_int(filename))
+            file_paths.append(file_path)
+            phoneme_labels.append(extract_middle_int(filename))
     return file_names, bg_sample, phoneme_labels
 
 def extract_middle_int(s):
