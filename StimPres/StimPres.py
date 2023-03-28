@@ -39,7 +39,8 @@ num_tests = 88; # 2 blocks for 44 phonemes
 wait_slide = '47' # slide number of wait slide
 begin_test_slide = '2' # slide number of begin test slide
 
-initials = 'SL'
+## IMPORTANT Change Initials for Each Test Subject
+initials = 'DLR'
 
 # Corresponds to slides 3-4647
 
@@ -162,7 +163,13 @@ time.sleep(2)
 # Sets the powerpoint to fullscreen
 pyautogui.hotkey(full_path,'f5')
 
-time.sleep(5)
+#time.sleep(5)
+# TODO Implement the Rules slide
+time.sleep(2)
+# Move to the Rules Slide
+pyautogui.press('enter')
+# Sleep to allow reading of the rules
+time.sleep(7)
 
 # one_block presents visual and auditory stimulus, then conducts five EEG tests separated into 2 second intervals
 # slides_place is the index in the slides of the phoneme being tested
@@ -224,7 +231,8 @@ def one_block(slides_place):
 
     data = board.get_board_data()
     board.stop_stream()
-    naming_convention = initials + '_' + str(slides_place) +'_Z' 
+    naming_convention = initials + '_' + str(slides_place) +'_BC367'
+    naming_convention = initials + '_' + str(slides_place) +'_8'
     # Old Naming Convention:
     # naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
     DataFilter.write_file(data, naming_convention + '.txt', 'w')
@@ -253,3 +261,5 @@ board.release_session()
 for i in range(0,43):
 
     print(test_slides[i][1])
+
+pyautogui.hotkey('esc')

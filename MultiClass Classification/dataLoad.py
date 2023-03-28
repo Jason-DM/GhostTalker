@@ -55,8 +55,7 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 # Processing all the files into the feature and label matricies
 
 # TODO: Need to read all the file names using a for loop from another folder
-# TODO: Right now just using the only available dataset to build the process
-# for one element
+
 # nameFile = 'SL5_3.txt'
 # filePath = "D:\Stim_Pres_Data" # Change to dedicated File Path
 # output_file = 0
@@ -66,10 +65,14 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 #     if filename.endswith(".txt"):  # Open File as txt
 #         file_path = os.path.join(filePath, filename)
 #         with open(file_path, "r") as input_file:
-#             # What do we want to do with Loaded file? Change to CSV?
 
-nameFile = 'test_data_11_29_22.txt'
-df = pd.read_csv(nameFile, sep=',', skiprows=4)
+
+# TODO: write fxn to return the following
+#
+# filenameList = ['test_data_11_29_22.txt'....]
+# background = 'background.txt'
+# phoneme = [1....]
+
 
 # load data
 nameFile = 'test_data_11_29_22.txt'
@@ -81,6 +84,7 @@ df = df[df.columns[1:17]]
 # TODO: Slice data from markers
 # For each column transform into feature vector
 feature_vector = []
+# TODO: Write this as functions in a class
 for col_index, col_name in enumerate(df.columns):
     window_size = np.floor(df.shape[0]/2)
     for windows in range(NUM_WINDOWS):
@@ -88,25 +92,13 @@ for col_index, col_name in enumerate(df.columns):
         feature_vector.append(np.mean(df.iloc[windows*window_size:(windows+1)
                                               * window_size:, col_index]))
 
-    # Goal for Today:
+    # TODO: Write a function for frequency filtering
     # Build tunable FFT
     # yf = fft(np.array(df[df.columns[2]]))
     # xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
     # plt.plot(xf, np.abs(yf))
     # plt.show()
 
-    # So do I extrapolate using
-    # Transpose in the end to get columns as rows
-    # to then concat together
-    # df.T
-    #
-    # Discretize each channel
-    # TODO: QUESTION: Will each element have the same size?
-    # TODO: QUESTION: How many seconds between sample seconds?
-    # TODO: QUESTION: Only using the 16 channels or accel and other as well?
-
-    # TODO: Should I remove samples if the sum of
-    # their acceleration data too high?
     # %%
     # # perform feature extraction
     # print('Extracting features...')
