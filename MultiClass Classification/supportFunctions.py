@@ -120,19 +120,31 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     return b, a
 
 def get_filepaths(folder_path):
+    """
+    Returns a list of complete filepaths to each data file and list of phoneme labels
+    :param folder_path: string containing path to folder name for a single day of tests
+    :return: List of filepaths, path to background sample, list of phoneme labels
+    """
+    #Initialize return values
     file_paths = []
     phoneme_labels = []
     bg_sample = ""
     for filename in os.listdir(folder_path):
+        #Combine folder path with filename for file path
         file_path = os.path.join(folder_path,filename)
         if filename.endswith("_BC367"):
+            #Extract bg sample
             bg_sample = file_path
         else:
+            #if not bg sample, add path to file_paths and phoneme label.
             file_paths.append(file_path)
             phoneme_labels.append(extract_middle_int(filename))
-    return file_names, bg_sample, phoneme_labels
+    return file_paths, bg_sample, phoneme_labels
 
 def extract_middle_int(s):
+    """
+    Returns the middle integer based on our naming convention ABC_12_12 using regex
+    """
     match = re.search(r"[A-Za-z]{3}_(\d+)_(\d+)", s)
     if match:
         return int(match.group(1))
