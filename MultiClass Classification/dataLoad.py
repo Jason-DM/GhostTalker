@@ -75,22 +75,19 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 
 
 # load data
-nameFile = 'test_data_11_29_22.txt'
-df = pd.read_csv(nameFile, sep=',', skiprows=4)
+nameFile = 'SL5_3.txt'
+df = pd.read_csv(nameFile, sep='\t')
 N_SAMPLES = df.shape[0]
+df.columns = [i for i in range(32)]
 # Only using the 16 channles as features
-df = df[df.columns[1:17]]
-# TODO: Slice to include other channel to include markers
-# TODO: Slice data from markers
-# For each column transform into feature vector
+df = df[df.columns[1:16]]
+
+
 feature_vector = []
-# TODO: Write this as functions in a class
-for col_index, col_name in enumerate(df.columns):
-    window_size = np.floor(df.shape[0]/2)
-    for windows in range(NUM_WINDOWS):
-        window_number = windows+1
-        feature_vector.append(np.mean(df.iloc[windows*window_size:(windows+1)
-                                              * window_size:, col_index]))
+for col in df.columns:
+    subsections = np.array_split(df[col], NUM_WINDOWS)
+    means = [sub.mean() for sub in subsections]
+    feature_vector.extend(means)
 
     # TODO: Write a function for frequency filtering
     # Build tunable FFT
@@ -98,6 +95,12 @@ for col_index, col_name in enumerate(df.columns):
     # xf = fftfreq(N_SAMPLES, 1/SAMPLE_RATE)
     # plt.plot(xf, np.abs(yf))
     # plt.show()
+
+    # TODO: Talk to Dr. Schniter for the best way to organize this and do hyperparamter tuning
+    # TODO: Run this matrix through classifier
+    # TODO: Save the matrix as csv
+    # TODO: Just start getting all of the hyperparamters
+    # TODO: start adding all of the features you want to test to the feature matrix, make it huge
 
     # %%
     # # perform feature extraction

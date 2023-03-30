@@ -47,8 +47,8 @@ nameFile2 = './Sample/SL5_s.txt'
 
 # load data
 print('Loading datasets...')
-df1 = pd.read_csv(nameFile1, sep='\t', skiprows=6)
-df2 = pd.read_csv(nameFile2, sep='\t', skiprows=6)
+df1 = pd.read_csv(nameFile1, skiprows=6)
+df2 = pd.read_csv(nameFile2, skiprows=6)
 
 # perform feature extraction
 print('Extracting features...')
