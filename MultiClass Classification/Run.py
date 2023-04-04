@@ -1,5 +1,6 @@
-
+# %%
 # Imports
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -66,3 +67,13 @@ df = pd.DataFrame(data)
 labels_vector = np.array(labels_vector)
 
 # %%
+# Select random digits
+nplt = 4
+nsamp = X.shape[0]
+Iperm = np.random.permutation(nsamp)
+
+C = confusion_matrix(yts, yhat, normalize='true')  # each row sums to one
+
+# Print the confusion matrix
+disp = ConfusionMatrixDisplay(C)
+disp.plot()
