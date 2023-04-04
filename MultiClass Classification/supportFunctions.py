@@ -10,12 +10,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_selection import RFE
 from sklearn.svm import SVR
 
-from sklearn.model_selection import cross_val_score
-from sklearn import metrics
+from sklearn.model_selection import cross_val_score, cross_val_predict, KFold, cross_validate
 from sklearn.cluster import DBSCAN
-from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score
-from scipy.stats import stats
-
+from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score, confusion_matrix, ConfusionMatrixDisplay, make_scorer
 '''
 DLR's code.
 def eegFeatureExtraction(df, fs, lowcut, highcut, pcti):
@@ -265,3 +262,44 @@ def crossValClass(clf, X, y, xfold):
 
 def vectorizeElement(df):
     df
+
+
+def multiclass_performance(X, y, model_fitted):
+
+    scoring = {
+        'precision_macro': 'precision_macro',
+        'recall_macro': 'recall_macro',
+        'f1_macro': 'f1_macro',
+        'accuracy': 'accuracy'
+    }
+    kf = KFold(n_splits=100, shuffle=True, random_state=9)
+
+    cv_results = cross_validate(model_fitted, X, y, cv=kf, scoring=scoring)
+
+    # Extract test metrics
+    prec = cv_results['test_precision_macro']
+    rec = cv_results['test_recall_macro']
+    f1 = cv_results['test_f1_macro']
+    acc = cv_results['test_accuracy']
+
+    # Take average values of the metrics
+    precm_unreg = np.mean(prec)
+    recm_unreg = np.mean(rec)
+    f1m_unreg = np.mean(f1)
+    accm_unreg = np.mean(acc)
+
+    # Compute the standard errors
+    prec_se_unreg = np.std(prec, ddof=1)/np.sqrt(10)
+    rec_se_unreg = np.std(rec, ddof=1)/np.sqrt(10)
+    f1_se_unreg = np.std(f1, ddof=1)/np.sqrt(10)
+    acc_se_unreg = np.std(acc, ddof=1)/np.sqrt(10)
+
+    print('Precision = {0:.4f}, SE={1:.4f}'.format(precm_unreg, prec_se_unreg))
+    print('Recall =    {0:.4f}, SE={1:.4f}'.format(recm_unreg, rec_se_unreg))
+    print('f1 =        {0:.4f}, SE={1:.4f}'.format(f1m_unreg, f1_se_unreg))
+    print('Accuracy =  {0:.4f}, SE={1:.4f}'.format(accm_unreg, acc_se_unreg))
+
+    yhat = cross_val_predict(model_fitted, X, y, cv=kf)
+    C = confusion_matrix(y, yhat, normalize='true')
+    disp = ConfusionMatrixDisplay(confusion_matrix=C)
+    disp.plot()
