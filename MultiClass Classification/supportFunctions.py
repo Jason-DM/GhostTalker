@@ -69,25 +69,27 @@ def eegFeatureExtraction(df, fs, lowcut, highcut, pcti):
     return (featureMatrix)
 '''
 # adjusted code to account for 16 channels. Should work?
+
+
 def eegFeatureExtraction(df, fs, lowcut, highcut, pcti):
     # Select the 16 channels
     channels = []
     for i in range(16):
         channels.append(df.iloc[:, i+2])
-        
+
     # Convert each channel to a numpy array
     c = []
     for i in range(16):
         c.append(np.real(np.asarray(channels[i])))
-        
+
     # Normalize each array
     for i in range(16):
         c[i] = c[i] - np.mean(c[i])
-        
+
     # Shift each array by fs samples
     for i in range(16):
         c[i] = c[i][fs:]
-        
+
     # Extract features from the first channel
     f = featureExtraction(c[0], fs, lowcut, highcut, pcti)
     features = np.squeeze(np.shape(f))
@@ -95,7 +97,7 @@ def eegFeatureExtraction(df, fs, lowcut, highcut, pcti):
     # Initialize the feature matrix with the first channel's features
     featureMatrix = np.zeros((len(c[0])//(4*fs), (16*features)))
     featureMatrix[:, :features] = f
-    
+
     # Iterate over each segment and extract features from each channel
     for i in range(featureMatrix.shape[0]):
         lbnds = 4*fs*i
@@ -104,7 +106,7 @@ def eegFeatureExtraction(df, fs, lowcut, highcut, pcti):
             s = featureExtraction(c[j][lbnds:ubnds], fs, lowcut, highcut, pcti)
             featall = np.squeeze(s[0:features])
             featureMatrix[i, j*features:(j+1)*features] = featall
-            
+
     return featureMatrix
 
 
@@ -119,27 +121,29 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     b, a = butter(order, [low, high], btype='band')
     return b, a
 
+
 def get_filepaths(folder_path):
     """
     Returns a list of complete filepaths to each data file and list of phoneme labels
     :param folder_path: string containing path to folder name for a single day of tests
     :return: List of filepaths, path to background sample, list of phoneme labels
     """
-    #Initialize return values
+    # Initialize return values
     file_paths = []
     phoneme_labels = []
     bg_sample = ""
     for filename in os.listdir(folder_path):
-        #Combine folder path with filename for file path
-        file_path = os.path.join(folder_path,filename)
+        # Combine folder path with filename for file path
+        file_path = os.path.join(folder_path, filename)
         if filename.endswith("_BC367"):
-            #Extract bg sample
+            # Extract bg sample
             bg_sample = file_path
         else:
-            #if not bg sample, add path to file_paths and phoneme label.
+            # if not bg sample, add path to file_paths and phoneme label.
             file_paths.append(file_path)
             phoneme_labels.append(extract_middle_int(filename))
     return file_paths, bg_sample, phoneme_labels
+
 
 def extract_middle_int(s):
     """
