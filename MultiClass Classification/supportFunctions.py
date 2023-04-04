@@ -135,7 +135,7 @@ def get_filepaths(folder_path):
     for filename in os.listdir(folder_path):
         # Combine folder path with filename for file path
         file_path = os.path.join(folder_path, filename)
-        if filename.endswith("_BC367"):
+        if filename.endswith("_BC367.txt"):
             # Extract bg sample
             bg_sample = file_path
         else:
