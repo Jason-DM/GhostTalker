@@ -42,8 +42,8 @@ featureNumber = 3  # number of features to retain
 N = 4  # value for N-fold cross-validation
 
 # filenames of EEG files
-nameFile1 = './Sample/SL5_3.txt'
-nameFile2 = './Sample/SL5_s.txt'
+nameFile1 = './DLR_0_1.txt'
+nameFile2 = './DLR_1_1.txt'
 
 # load data
 print('Loading datasets...')
