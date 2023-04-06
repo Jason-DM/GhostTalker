@@ -24,10 +24,25 @@ from scipy.stats import stats
 import supportFunctions as sp
 
 # %%
-# TODO:
-# Assuming mean for feature extraction
+# TODO: Preprocessing:
+# Try DB2 Transform
+# Implement HighPass Filter
 # Assuming no frequency preprocessing
-# Assuming not using markers
+# Use markers
+# After those:
+# Try Periodogram
+# Try More windows
+
+# TODO: Feature Selection:
+# Try L1 Feature Selection
+# Try Genetic Alg. For Feature Selection
+# Try LaRocco's Feature Selection Alg.
+# Compare to see which does best
+
+# TODO: Model and Analysis:
+# Implement One Vs One Model
+# Print performance stats (which phoneme does best and which does worst)
+
 print('Setting parameters...')
 N = 4  # value for N-fold cross-validation
 SAMPLE_RATE = 250  # Hz (subject to change)
@@ -99,9 +114,7 @@ sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
 # %%
-# Troubleshoot MultiClass Classification...
-
-# Generate multiclass classification data
+# Test Data
 
 Xs = preprocessing.scale(df)
 y = labels_vector
