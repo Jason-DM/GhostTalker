@@ -27,7 +27,6 @@ import supportFunctions as sp
 # TODO: Preprocessing:
 # Try DB2 Transform
 # Implement HighPass Filter
-# Assuming no frequency preprocessing
 # Use markers
 # After those:
 # Try Periodogram
