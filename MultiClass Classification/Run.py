@@ -127,6 +127,13 @@ sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
 # %%
+# Write each Preprocessing way
+# High Pass - Cole
+# Periodogram - Sam
+# DB2 - Jason
+# P Welch - Surya
+
+# %%
 # Feature Selection:
 
 # Set the regularization parameter C = 1
