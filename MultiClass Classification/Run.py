@@ -127,7 +127,7 @@ sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
 # %%
-# Write each Preprocessing way
+# Write each Preprocessing way - write in support function
 # High Pass - Cole
 # Periodogram - Sam
 # DB2 - Jason
