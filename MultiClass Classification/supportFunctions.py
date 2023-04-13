@@ -118,6 +118,13 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     b, a = butter(order, [low, high], btype='band')
     return b, a
 
+def butter_highpass(lowcut, fs, order):
+    nyq = 0.5 * fs
+    low = (lowcut / nyq)
+    if low <= 0:
+        low = 0.001
+    b, a = butter(order, low, btype='highpass')
+    return b, a
 
 def get_filepaths(folder_path):
     """
@@ -158,6 +165,10 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=4):
     y = lfilter(b, a, data)
     return y
 
+def butter_highpass_filter(data, lowcut, fs, order=4):
+    b, a = butter_highpass(lowcut, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
 
 def welchProc(data, fs):
     # wsize=round(fs/10)
