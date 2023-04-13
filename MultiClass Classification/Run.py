@@ -28,7 +28,7 @@ import supportFunctions as sp
 # %%
 # TODO: Preprocessing:
 # Try DB2 Transform
-# Subtract weighted welch of each background from signal
+# Subtract weighted welch opf each background from signal
 # Implement HighPass Filter
 # Use markers
 # After those:
