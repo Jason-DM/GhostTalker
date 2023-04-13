@@ -324,3 +324,7 @@ def highPass(sample_freq, lowcut, order, data):
     filtered = sosfilt(sos, data)
     # filtered is the filtered version of data
     return (filtered)
+
+# NOTE - I would like to try to use the MNE library but am not quite sure how to import it,
+# The MNE Lib would allow me to use filtering functions meant for EEG data compared to the
+# Current route I have gone
