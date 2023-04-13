@@ -42,13 +42,13 @@ featureNumber = 3  # number of features to retain
 N = 4  # value for N-fold cross-validation
 
 # filenames of EEG files
-nameFile1 = 'eegSession1.txt'
-nameFile2 = 'eegSession2.txt'
+nameFile1 = './DLR_0_1.txt'
+nameFile2 = './DLR_1_1.txt'
 
 # load data
 print('Loading datasets...')
-df1 = pd.read_csv(nameFile1, skiprows=6)
-df2 = pd.read_csv(nameFile2, skiprows=6)
+df1 = pd.read_csv(nameFile1, sep='\t', skiprows=6)
+df2 = pd.read_csv(nameFile2, sep='\t', skiprows=6)
 
 # perform feature extraction
 print('Extracting features...')

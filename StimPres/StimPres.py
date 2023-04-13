@@ -39,8 +39,6 @@ num_tests = 88; # 2 blocks for 44 phonemes
 wait_slide = '47' # slide number of wait slide
 begin_test_slide = '2' # slide number of begin test slide
 
-## IMPORTANT Change Initials for Each Test Subject
-initials = 'DLR'
 
 # Corresponds to slides 3-4647
 
@@ -231,10 +229,18 @@ def one_block(slides_place):
 
     data = board.get_board_data()
     board.stop_stream()
-    naming_convention = initials + '_' + str(slides_place) +'_BC367'
-    naming_convention = initials + '_' + str(slides_place) +'_8'
+    
+    ## IMPORTANT Change Initials for Each Test Subject
+    initials = 'QT'
+
     # Old Naming Convention:
     # naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
+    # Background Naming Convention
+    # naming_convention = initials + '_' + str(slides_place) +'_BKGRD'
+    # Current Naming Convention - NOTE DLR's 8th test currently
+    naming_convention = initials + '_' + str(slides_place) +'_4'
+
+    # Print File
     DataFilter.write_file(data, naming_convention + '.txt', 'w')
 
 
