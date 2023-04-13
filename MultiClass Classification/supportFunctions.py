@@ -2,7 +2,8 @@ import numpy as np
 import scipy as sp
 import pandas as pd
 from scipy import signal, arange, fft, fromstring, roll
-from scipy.signal import butter, lfilter, ricker
+from scipy.signal import butter, lfilter, ricker, sosfilt
+from math import pi
 import os
 import glob
 import re
@@ -305,3 +306,27 @@ def multiclass_performance(X, y, model_fitted):
     C = confusion_matrix(y, yhat, normalize='true')
     disp = ConfusionMatrixDisplay(confusion_matrix=C)
     disp.plot()
+
+# Write Preprocessing Functions
+# High pass filter function 
+# NOTE - set sample_freq = 250, order = 2, data is the input data of one channel in an array
+# I believe Surya set up the code to make it into arrays so this can be used here
+# TODO figure out what frequency to cut off and what order filter we want
+def highPass(sample_freq, lowcut, order, data):
+    #t = np.arange(0.0, time, 1/sample_freq)
+    nq_freq = sample_freq*1/3 # Set to 1/3 because papers say that 1/3 is safer instead of 1/2
+    # Especially if we don't know if the noise and signal are phase locked
+    low  = lowcut / nq_freq
+    # NOTE if we want to implement a bandpass
+    #high = highcut / nyquistFreq
+
+    sos  = butter(order, [low], btype='highpass', output='sos')
+
+    # data is a numpy array containing the samples of one EEG channel
+    filtered = sosfilt(sos, data)
+    # filtered is the filtered version of data
+    return (filtered)
+
+# NOTE - I would like to try to use the MNE library but am not quite sure how to import it,
+# The MNE Lib would allow me to use filtering functions meant for EEG data compared to the
+# Current route I have gone
