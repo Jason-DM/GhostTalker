@@ -2,7 +2,7 @@ clc
 clear
 close all
 
-data=load('C:\Users\dchel\OneDrive\Documents\GitHub\GhostTalker\TestData\DLR_Tests\3-21-2023\DLR_6_2.txt');
+data=load('C:\Users\dchel\OneDrive\Documents\GitHub\GhostTalker\TestData\_Tests\3-21-2023\DLR_7_1.txt');
 
 marker_channel = data(:,32);
 markers = find(marker_channel);
@@ -41,7 +41,8 @@ figure;
 hold on
 for i=2:17
     current_channel_welch = data(:,i);
-    [pxx,f] = pwelch(current_channel_welch, 500, 250, 256);
+    z = bandpass(current_channel_welch, 0.5, 100, 250);
+    [pxx,f] = pwelch(current_channel_welch, 500, 250, 500, fs);
     plot(f,10*log10(pxx))
     title("Pwelch Using FFT")
     xlabel("Frequency (Hz)")

@@ -2,7 +2,7 @@ clc
 clear
 close all
 
-data=load('C:\Users\dchel\OneDrive\Documents\GitHub\GhostTalker\TestData\DLR_Tests\3-21-2023\DLR_6_2.txt');
+data=load('C:\Users\dchel\OneDrive\Documents\GitHub\GhostTalker\TestData\Sam_Tests\3-7-23\SL_7_1.txt');
 
 marker_channel = data(:,32);
 markers = find(marker_channel);
@@ -41,9 +41,10 @@ figure;
 hold on
 for i=2:17
     current_channel_welch = data(:,i);
-    [pxx,f] = pwelch(current_channel_welch, 500, 250, 256);
+    hpc = highpass(current_channel_welch,0.5,250);
+    [pxx,f] = pwelch(hpc, 500, 250, 500, fs);
     plot(f,10*log10(pxx))
-    title("Pwelch Using FFT")
+    title("Pwelch Using FFT for Sam Lecian Phoneme 7 Trial 1 Day 2")
     xlabel("Frequency (Hz)")
     ylabel("Power/Frequency (dB/Hz)")
 end

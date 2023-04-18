@@ -1,5 +1,6 @@
 # %%
 # Imports
+'''
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import make_classification
@@ -55,14 +56,18 @@ print("Constructing Data Matrix to train classifier...")
 # file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 
+#file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
+#    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
-    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
+'C:\\Users\\dchel\\OneDrive\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 
 # file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 
+#file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
+#    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
-    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
+'C:\\Users\\dchel\\OneDrive\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 
 file_paths = file_paths1+file_paths2
 phoneme_labels = phoneme_labels1+phoneme_labels2
@@ -82,7 +87,9 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     df = pd.read_csv(nameFile, sep='\t', header=None)
     # df = df[df.columns[1:16]]  # Only using the 16 channles as features
     feature_vector = []
-    if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
+    #if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
+        #n = 3
+    if nameFile == 'C:\\Users\\dchel\\OneDrive\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
         n = 3
     else:
         n = 6
@@ -160,7 +167,10 @@ svm_object = svm.SVC(probability=False, kernel="rbf",
                      C=2.8, gamma=.0073, verbose=1)
 svm_object.fit(Xs, y)
 sp.multiclass_performance(Xs, y, logreg)
+sp.multiclass_performance(Xs, y, svm_object)'''
+
+
+# %%
+sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
-
-
 # %%
