@@ -3,7 +3,8 @@
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import make_classification
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -18,10 +19,12 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_selection import RFE
 from sklearn import svm
 
-from sklearn.model_selection import cross_val_score, cross_val_predict, KFold, cross_validate
+from sklearn.model_selection import cross_val_score, cross_val_predict, KFold, cross_validate, train_test_split
 from sklearn import metrics, linear_model, preprocessing
 from sklearn.cluster import DBSCAN
-from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score, confusion_matrix, ConfusionMatrixDisplay, make_scorer
+from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score, confusion_matrix, ConfusionMatrixDisplay, make_scorer, classification_report
+from sklearn.svm import SVC
+from sklearn.multiclass import OneVsOneClassifier
 from scipy.stats import stats
 import supportFunctions as sp
 
@@ -56,13 +59,13 @@ print("Constructing Data Matrix to train classifier...")
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 
 file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
-    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
+    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023')
 
 # file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 
 file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
-    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
+    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-23-2023')
 
 file_paths = file_paths1+file_paths2
 phoneme_labels = phoneme_labels1+phoneme_labels2
@@ -82,7 +85,9 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     df = pd.read_csv(nameFile, sep='\t', header=None)
     # df = df[df.columns[1:16]]  # Only using the 16 channles as features
     feature_vector = []
-    if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
+    #if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
+    #    n = 3
+    if nameFile == '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
         n = 3
     else:
         n = 6
@@ -163,4 +168,36 @@ sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
 
+# %%
+y = labels_vector
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+
+# Initialize the One-vs-One classifier with a Support Vector Machine (SVM) base estimator
+ovr_classifier = OneVsOneClassifier(SVC())
+
+# Fit the classifier on the training data
+ovr_classifier.fit(X_train, y_train)
+
+# Predict the classes of the test set
+y_pred = ovr_classifier.predict(X_test)
+
+# Print the classification report
+print(classification_report(y_test, y_pred))
+# %%
+#Adaboost Start
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+
+# Initialize the AdaBoost classifier with a Decision Tree base estimator
+ada_classifier = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators=200)
+
+# Fit the classifier on the training data
+ada_classifier.fit(X_train, y_train)
+
+# Predict the classes of the test set
+y_pred = ada_classifier.predict(X_test)
+
+# Print the classification report
+print(classification_report(y_test, y_pred))
 # %%

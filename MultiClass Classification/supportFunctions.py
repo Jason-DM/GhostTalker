@@ -276,6 +276,8 @@ def vectorizeElement(df):
     df
 
 
+
+
 def multiclass_performance(X, y, model_fitted):
 
     scoring = {
