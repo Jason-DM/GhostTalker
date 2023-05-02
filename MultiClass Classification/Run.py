@@ -92,7 +92,7 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     else:
         n = 6
     for i in range(1, n):
-        df_i = df.iloc[df.loc[df[31] == i].index[0]                       :df.loc[df[31] == i].index[1], :]
+        df_i = df.iloc[df.loc[df[31] == i].index[0]:df.loc[df[31] == i].index[1], :]
         for col in df_i.columns:
             subsections = np.array_split(df_i[col], NUM_WINDOWS)
             means = [sub.mean() for sub in subsections]
@@ -109,27 +109,27 @@ df = pd.DataFrame(data)
 labels_vector = np.array(labels_vector)
 
 
-# %%
-# Troubleshoot MultiClass Classification...
+# # %%
+# # Troubleshoot MultiClass Classification...
 
-# Generate multiclass classification data
-X, y = make_classification(n_samples=1000, n_classes=5, n_informative=10,
-                           n_features=20, random_state=42)
-df_test = pd.DataFrame(X)
+# # Generate multiclass classification data
+# X, y = make_classification(n_samples=1700, n_classes=44, n_informative=10,
+#                            n_features=128, random_state=42)
+# df_test = pd.DataFrame(X)
 
-kf = KFold(n_splits=100, shuffle=True, random_state=9)
-Xs = preprocessing.scale(df_test)
+# kf = KFold(n_splits=100, shuffle=True, random_state=9)
+# Xs = preprocessing.scale(df_test)
 
 
-logreg = linear_model.LogisticRegression(
-    C=500, solver='liblinear', multi_class='ovr')
-logreg.fit(Xs, y)
+# logreg = linear_model.LogisticRegression(
+#     C=500, solver='liblinear', multi_class='ovr')
+# logreg.fit(Xs, y)
 
-svm_object = svm.SVC(probability=False, kernel="rbf",
-                     C=2.8, gamma=.0073, verbose=1)
-svm_object.fit(Xs, y)
-sp.multiclass_performance(Xs, y, logreg)
-sp.multiclass_performance(Xs, y, svm_object)
+# svm_object = svm.SVC(probability=False, kernel="rbf",
+#                      C=2.8, gamma=.0073, verbose=1)
+# svm_object.fit(Xs, y)
+# sp.multiclass_performance(Xs, y, logreg)
+# sp.multiclass_performance(Xs, y, svm_object)
 
 # %%
 # Write each Preprocessing way - write in support function
@@ -141,17 +141,17 @@ sp.multiclass_performance(Xs, y, svm_object)
 # %%
 # Feature Selection:
 
-# Set the regularization parameter C = 1
-logistic = LogisticRegression(
-    C=1, penalty='l1', solver='liblinear', random_state=7).fit(Xs, y)
-model = SelectFromModel(logistic, prefit=True)
+# # Set the regularization parameter C = 1
+# logistic = LogisticRegression(
+#     C=1, penalty='l1', solver='liblinear', random_state=7).fit(Xs, y)
+# model = SelectFromModel(logistic, prefit=True)
 
-X_new = model.transform(Xs)
+# X_new = model.transform(Xs)
 
-# Dropping Features
-#selected_columns = selected_features.columns[selected_features.var() == 0]
+# # Dropping Features
+# #selected_columns = selected_features.columns[selected_features.var() == 0]
 
-# %%
+# # %%
 # Test Data
 
 Xs = preprocessing.scale(df)
@@ -168,36 +168,38 @@ sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
 
-# %%
-y = labels_vector
-# Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+# # %%
+# y = labels_vector
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
 
-# Initialize the One-vs-One classifier with a Support Vector Machine (SVM) base estimator
-ovr_classifier = OneVsOneClassifier(SVC())
+# # Initialize the One-vs-One classifier with a Support Vector Machine (SVM) base estimator
+# ovr_classifier = OneVsOneClassifier(SVC())
 
-# Fit the classifier on the training data
-ovr_classifier.fit(X_train, y_train)
+# # Fit the classifier on the training data
+# ovr_classifier.fit(X_train, y_train)
 
-# Predict the classes of the test set
-y_pred = ovr_classifier.predict(X_test)
+# # Predict the classes of the test set
+# y_pred = ovr_classifier.predict(X_test)
 
-# Print the classification report
-print(classification_report(y_test, y_pred))
+# # Print the classification report
+# print(classification_report(y_test, y_pred))
 # %%
 #Adaboost Start
 # Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+# y = labels_vector
+# X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
 
-# Initialize the AdaBoost classifier with a Decision Tree base estimator
-ada_classifier = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators=200)
+# # Initialize the AdaBoost classifier with a Decision Tree base estimator
+# ada_classifier = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators=200)
 
-# Fit the classifier on the training data
-ada_classifier.fit(X_train, y_train)
+# # Fit the classifier on the training data
+# ada_classifier.fit(X_train, y_train)
 
-# Predict the classes of the test set
-y_pred = ada_classifier.predict(X_test)
+# # Predict the classes of the test set
+# y_pred = ada_classifier.predict(X_test)
 
-# Print the classification report
-print(classification_report(y_test, y_pred))
+# # Print the classification report
+# print(classification_report(y_test, y_pred))
+
 # %%
