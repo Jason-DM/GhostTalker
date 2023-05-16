@@ -308,15 +308,15 @@ def multiclass_performance(X, y, model_fitted):
     f1_se_unreg = np.std(f1, ddof=1)/np.sqrt(10)
     acc_se_unreg = np.std(acc, ddof=1)/np.sqrt(10)
 
-    print('Precision = {0:.4f}, SE={1:.4f}'.format(precm_unreg, prec_se_unreg))
-    print('Recall =    {0:.4f}, SE={1:.4f}'.format(recm_unreg, rec_se_unreg))
-    print('f1 =        {0:.4f}, SE={1:.4f}'.format(f1m_unreg, f1_se_unreg))
-    print('Accuracy =  {0:.4f}, SE={1:.4f}'.format(accm_unreg, acc_se_unreg))
-
     yhat = cross_val_predict(model_fitted, X, y, cv=kf)
     C = confusion_matrix(y, yhat, normalize='true')
     disp = ConfusionMatrixDisplay(confusion_matrix=C)
     disp.plot()
+
+    print('Precision = {0:.4f}, SE={1:.4f}'.format(precm_unreg, prec_se_unreg))
+    print('Recall =    {0:.4f}, SE={1:.4f}'.format(recm_unreg, rec_se_unreg))
+    print('f1 =        {0:.4f}, SE={1:.4f}'.format(f1m_unreg, f1_se_unreg))
+    print('Accuracy =  {0:.4f}, SE={1:.4f}'.format(accm_unreg, acc_se_unreg))
 
 # Write Preprocessing Functions
 # High pass filter function 
