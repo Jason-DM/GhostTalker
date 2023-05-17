@@ -89,6 +89,7 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
         n = 6
     for i in range(1, n):
         print(i)
+        feature_vector = []
 
         df_i = df.iloc[df.loc[df[31] == i].index[0]                       :df.loc[df[31] == i].index[1], :]
         for col in df_i.columns:
