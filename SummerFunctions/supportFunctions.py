@@ -183,6 +183,16 @@ def smooth(x, window_len=11, window='hanning'):
     y = np.convolve(w/w.sum(), s, mode='valid')
     return y
 
+def featureCreation(data, fs, lowcut, highcut, pcti, windows):
+    feature_vector = np.array([])
+    for i in range(16):
+        for j in range(windows):
+            window_low = ((j-1) / windows) * len(data)
+            window_high = (j / windows) * len(data)
+            current_data = data[:,i]
+            current_feature = featureExtraction(current_data, fs, lowcut, highcut, pcti)
+            feature_vector = np.hstack((feature_vector, current_feature))
+    return feature_vector
 
 def featureExtraction(data, fs, lowcut, highcut, pcti):
     widths = np.arange(1, 31)
@@ -200,11 +210,11 @@ def featureExtraction(data, fs, lowcut, highcut, pcti):
     vrms = np.sqrt(P.max())
     Psum = np.sum(P, axis=1)
     Psum = Psum.flatten()
-    # print(np.shape(Psum))
-    # print(np.shape(vrms))
-    # print(np.shape(peakF))
-    # print(np.shape(peakFLoc))
-    # print(np.shape(intensityPcti))
+    print(np.shape(Psum))
+    print(np.shape(vrms))
+    print(np.shape(peakF))
+    print(np.shape(peakFLoc))
+    print(np.shape(intensityPcti))
     featureVector = np.hstack(
         (Psum.flatten(), vrms, peakF, peakFLoc, intensityPcti))
     # print(featureVector)
