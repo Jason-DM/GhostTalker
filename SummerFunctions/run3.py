@@ -56,10 +56,10 @@ NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
 
 print("Constructing Data Matrix to train classifier...")
 file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
-    './dlrTests/3-21-2023')
+    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023')
 
 file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
-    './dlrTests/3-23-2023')
+    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-23-2023')
 
 file_paths = file_paths1+file_paths2
 phoneme_labels = phoneme_labels1+phoneme_labels2
@@ -83,7 +83,7 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     feature_vector = []
     #if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
     #    n = 3
-    if nameFile == './TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
+    if nameFile == '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
         n = 3
     else:
         n = 6
@@ -91,7 +91,7 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
         print(i)
         feature_vector = []
 
-        df_i = df.iloc[df.loc[df[31] == i].index[0]                       :df.loc[df[31] == i].index[1], :]
+        df_i = df.iloc[df.loc[df[31] == i].index[0]:df.loc[df[31] == i].index[1], :]
         for col in df_i.columns:
             subsections = np.array_split(df_i[col], NUM_WINDOWS)
             means = [sub.mean() for sub in subsections]
