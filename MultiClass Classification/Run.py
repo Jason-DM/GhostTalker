@@ -58,14 +58,20 @@ print("Constructing Data Matrix to train classifier...")
 # file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 
+#file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
+#    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023')
+
 file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
-    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023')
+    'C:\\Users\\Cole\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023')
 
 # file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
 #    'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 
+#file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
+#    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-23-2023')
+
 file_paths2, bg_sample2, phoneme_labels2 = sp.get_filepaths(
-    '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-23-2023')
+    'C:\\Users\\Cole\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-23-2023')
 
 file_paths = file_paths1+file_paths2
 phoneme_labels = phoneme_labels1+phoneme_labels2
@@ -87,8 +93,10 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     feature_vector = []
     #if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
     #    n = 3
-    if nameFile == '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
-        n = 3
+    #if nameFile == '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
+    #    n = 3
+    if nameFile == 'C:\\Users\\Cole\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023':
+        n=3
     else:
         n = 6
     for i in range(1, n):
