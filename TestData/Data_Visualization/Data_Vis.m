@@ -8,8 +8,9 @@ for k=0:43 %If program has an error when running through check the file size to 
     i=k;
     % Cole Data Path
     %data=load('C:\Users\dchel\OneDrive\Documents\GitHub\GhostTalker\TestData\Sam_Tests\3-7-23\SL_7_1.txt');
+    data=load('C:\Users\Cole\Documents\GitHub\GhostTalker\TestData\Sam_Tests\3-8-23\SL_' + string(i) +'_1.txt');
     % Sam Data Path
-    data=load('\\coeit.osu.edu\home\l\lecian.1\Documents\Capstone\Sam_Tests\3-7-23\SL_'+string(i)+'_1.txt');
+    %data=load('\\coeit.osu.edu\home\l\lecian.1\Documents\Capstone\Sam_Tests\3-7-23\SL_'+string(i)+'_1.txt');
     %data=load('C:\GitHub\GhostTalker\TestData\Sam_Tests\3-7-23\SL_'+string(i)+'_1.txt');
     marker_channel = data(:,32);
     markers = find(marker_channel);
@@ -24,7 +25,9 @@ for k=0:43 %If program has an error when running through check the file size to 
         %xline(markers);
     end
 
+
     fs=250;
+    %{
     N = length(data);
     %figure(44+k+1);
     hold on
@@ -38,6 +41,7 @@ for k=0:43 %If program has an error when running through check the file size to 
         %plot(freq,pow2db(psdx))
 
     end
+    %}
     %{
     grid on
     title("Periodogram Using FFT")
@@ -45,6 +49,7 @@ for k=0:43 %If program has an error when running through check the file size to 
     ylabel("Power/Frequency (dB/Hz)")
     hold off;
     %}
+    background = load('C:\Users\Cole\Documents\GitHub\GhostTalker\TestData\Sam_Tests\\3-8-23\Background\\SL_0_B2.txt');
     figure(k+1);
     %figure(k+88+1);
     % ^^ Comment back out if using graphs above
@@ -52,7 +57,10 @@ for k=0:43 %If program has an error when running through check the file size to 
     for j=2:17
         current_channel_welch = data(:,j);
         hpc = highpass(current_channel_welch,0.5,250);
+        hpc_background = highpass(background(:,j),0.5,250);
         [pxx,f] = pwelch(hpc, 500, 250, 500, fs);
+        [pxx_background, u] = pwelch(hpc_background,500, 250, 500, fs);
+        pxx = pxx - pxx_background;
         plot(f,10*log10(pxx))
         title("Pwelch Using FFT for Sam Lecian Phoneme "+string(i)+" Trial 1 Day 2")
         xlabel("Frequency (Hz)")
