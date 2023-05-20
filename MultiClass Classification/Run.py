@@ -1,5 +1,7 @@
 # %%
 # Imports
+from sklearn.datasets import load_iris
+from sklearn.model_selection import GridSearchCV
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import make_classification
@@ -8,9 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 import scipy as sp
 import pandas as pd
-import matplotlib
 import matplotlib.pyplot as plt
-from scipy import signal, arange, fft, fromstring, roll
 from scipy.signal import butter, lfilter, ricker
 import os
 import glob
@@ -26,7 +26,18 @@ from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_sc
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsOneClassifier
 from scipy.stats import stats
-import supportFunctions as sp
+import support as sp
+from supportFunctions import featureExtraction, eegFeatureExtraction, eegFeatureReducer, balancedMatrix
+
+from sklearn.metrics import recall_score, precision_score, f1_score
+from sklearn.model_selection import train_test_split, cross_val_score, ShuffleSplit
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
+
 
 # %%
 # TODO: Preprocessing:
@@ -53,6 +64,12 @@ print('Setting parameters...')
 N = 4  # value for N-fold cross-validation
 SAMPLE_RATE = 250  # Hz (subject to change)
 NUM_WINDOWS = 2  # Dependent on number of samples of phonemes
+fs = 200  # features per second (Hz)
+pcti = 99.95  # amplitude percent
+lowcut = 1  # filter lower bound (Hz)
+highcut = (np.floor(fs/2))  # filter upper bound (Hz)
+featureNumber = 3  # number of features to retain
+N = 4  # value for N-fold cross-validation
 
 print("Constructing Data Matrix to train classifier...")
 # file_paths1, bg_sample1, phoneme_labels1 = sp.get_filepaths(
@@ -91,7 +108,7 @@ for (file_path, phoneme_label, bg_sample) in zip(file_paths, phoneme_labels, bg_
     df = pd.read_csv(nameFile, sep='\t', header=None)
     # df = df[df.columns[1:16]]  # Only using the 16 channles as features
     feature_vector = []
-    #if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
+    # if nameFile == 'C:\\Users\\surya\\Documents\\GitHub\\GhostTalker\\TestData\\DLR_Tests\\3-21-2023\\DLR_27_2.txt':
     #    n = 3
     #if nameFile == '/Users/jason/Documents/GitHub/GhostTalker/TestData/DLR_Tests/3-21-2023/DLR_27_2.txt':
     #    n = 3
@@ -175,6 +192,67 @@ svm_object.fit(Xs, y)
 sp.multiclass_performance(Xs, y, logreg)
 sp.multiclass_performance(Xs, y, svm_object)
 
+# compare classifiers
+print('Running classifiers...')
+clf = QuadraticDiscriminantAnalysis()
+print('QDA/LDA Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
+
+clf = LogisticRegression(random_state=0)
+print('Logistic Regression Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
+
+clf = GaussianNB()
+print('Naive Bayes Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
+
+clf = SVC(gamma=2, C=1)
+print('Linear SVM Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
+
+clf = AdaBoostClassifier(n_estimators=1000, random_state=0)
+print('AdaBoost Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
+
+clf = MLPClassifier(alpha=2, max_iter=100)
+print('MLP Results: ')
+scores = cross_val_score(clf, Xs, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, Xs, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+
 
 # # %%
 # y = labels_vector
@@ -193,7 +271,41 @@ sp.multiclass_performance(Xs, y, svm_object)
 # # Print the classification report
 # print(classification_report(y_test, y_pred))
 # %%
-#Adaboost Start
+# Adaboost Start
+# Split data into training and testing sets
+# y = labels_vector
+# X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+
+# # Initialize the AdaBoost classifier with a Decision Tree base estimator
+# ada_classifier = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators=200)
+
+# # Fit the classifier on the training data
+# ada_classifier.fit(X_train, y_train)
+
+# # Predict the classes of the test set
+# y_pred = ada_classifier.predict(X_test)
+
+# # Print the classification report
+# print(classification_report(y_test, y_pred))
+
+# # %%
+# y = labels_vector
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
+
+# # Initialize the One-vs-One classifier with a Support Vector Machine (SVM) base estimator
+# ovr_classifier = OneVsOneClassifier(SVC())
+
+# # Fit the classifier on the training data
+# ovr_classifier.fit(X_train, y_train)
+
+# # Predict the classes of the test set
+# y_pred = ovr_classifier.predict(X_test)
+
+# # Print the classification report
+# print(classification_report(y_test, y_pred))
+# %%
+# Adaboost Start
 # Split data into training and testing sets
 # y = labels_vector
 # X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2, random_state=42)
@@ -211,3 +323,50 @@ sp.multiclass_performance(Xs, y, svm_object)
 # print(classification_report(y_test, y_pred))
 
 # %%
+
+# Set parameters
+print('Setting parameters...')
+fs = 200  # features per second (Hz)
+pcti = 99.95  # amplitude percent
+lowcut = 1  # filter lower bound (Hz)
+highcut = (np.floor(fs/2))  # filter upper bound (Hz)
+featureNumber = 3  # number of features to retain
+N = 4  # value for N-fold cross-validation
+
+# filenames of EEG files
+nameFile1 = './Sl5_3.txt'
+nameFile2 = './Sl5_s.txt'
+
+# load data
+print('Loading datasets...')
+df1 = pd.read_csv(nameFile1, sep='\t', skiprows=6)
+df2 = pd.read_csv(nameFile2, sep='\t', skiprows=6)
+
+# perform feature extraction
+print('Extracting features...')
+featureMatrixA = eegFeatureExtraction(df1, fs, lowcut, highcut, pcti)
+featureMatrixB = eegFeatureExtraction(df2, fs, lowcut, highcut, pcti)
+
+# perform feature selection
+print('Selecting features...')
+topFeatures = eegFeatureReducer(featureMatrixA, featureMatrixB, featureNumber)
+
+featureMatrixA = np.squeeze(featureMatrixA[:, topFeatures])
+featureMatrixB = np.squeeze(featureMatrixB[:, topFeatures])
+
+t0 = np.zeros(np.shape(featureMatrixA)[0])
+t1 = np.ones(np.shape(featureMatrixB)[0])
+
+totalLength = np.array([len(t0), len(t1)])
+
+# prepare data for classification
+print('Preparing for classification...')
+s0 = balancedMatrix(featureMatrixA, totalLength)
+s1 = balancedMatrix(featureMatrixB, totalLength)
+
+X = np.vstack([s0, s1])
+t0 = 0*np.ones([1, len(s0)])
+t1 = 1*np.ones([1, len(s1)])
+
+targets = np.hstack([t0, t1])
+y = np.transpose(np.ravel(targets))

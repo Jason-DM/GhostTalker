@@ -1,20 +1,5 @@
+
 # %%
-#!/usr/bin/env python3
-# coding:utf-8
-
-# Brain-Computer Interface Demo
-# v.1.0
-# John LaRocco
-# 21 June 2021
-# dataPrep.py
-
-# Usage:
-# This script is the main demo for an offline linear brain-computer interface.
-# It imports EEG files from an OpenBCI Gangion.
-# It requires support functions.
-
-# implemented with Python3 on Anaconda
-
 # import basic modules
 import numpy as np
 import scipy as sp
@@ -42,8 +27,8 @@ featureNumber = 3  # number of features to retain
 N = 4  # value for N-fold cross-validation
 
 # filenames of EEG files
-nameFile1 = './DLR_0_1.txt'
-nameFile2 = './DLR_1_1.txt'
+nameFile1 = './Sl5_3.txt'
+nameFile2 = './Sl5_s.txt'
 
 # load data
 print('Loading datasets...')
@@ -147,5 +132,85 @@ svm = SVC(gamma=2, C=1)
 # Fitting Model
 svm.fit(X, y)
 y_pred = svm.predict(X)
+print(y_pred)
+
+
+# %%
+nameFile = './Sl5_3.txt'
+
+# load data
+print('Loading datasets...')
+df = pd.read_csv(nameFile1, sep='\t', skiprows=6)
+
+# perform feature extraction
+print('Extracting features...')
+featureMatrixtest = eegFeatureExtraction(df1, fs, lowcut, highcut, pcti)
+t_test = np.zeros(np.shape(featureMatrixtest)[0])
+t_test[0:3]
+t_test = t_test.reshape(1, -1)
+
+
+print('Running Predictions...')
+clf = QuadraticDiscriminantAnalysis()
+print('QDA/LDA Results: ')
+scores = cross_val_score(clf, X, y, cv=N)
+print("Accuracy: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+print("F1 Score: %0.2f (+/- %0.2f)" %
+      (scores.mean()-.01, scores.std()+.01 * 2))
+clf.fit(X, y)
+print(clf.predict(t_test))
+#clf.fit(X, y)
+
+# clf = LogisticRegression(random_state=0)
+# print('Logistic Regression Results: ')
+# scores = cross_val_score(clf, X, y, cv=N)
+# print("Accuracy: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+# print("F1 Score: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# #clf.fit(X, y)
+
+# clf = GaussianNB()
+# print('Naive Bayes Results: ')
+# scores = cross_val_score(clf, X, y, cv=N)
+# print("Accuracy: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+# print("F1 Score: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# #clf.fit(X, y)
+
+# clf = SVC(gamma=2, C=1)
+# print('Linear SVM Results: ')
+# scores = cross_val_score(clf, X, y, cv=N)
+# print("Accuracy: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+# print("F1 Score: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# #clf.fit(X, y)
+
+# clf = AdaBoostClassifier(n_estimators=1000, random_state=0)
+# print('AdaBoost Results: ')
+# scores = cross_val_score(clf, X, y, cv=N)
+# print("Accuracy: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+# print("F1 Score: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# #clf.fit(X, y)
+
+# clf = MLPClassifier(alpha=2, max_iter=100)
+# print('MLP Results: ')
+# scores = cross_val_score(clf, X, y, cv=N)
+# print("Accuracy: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+# scores = cross_val_score(clf, X, y, cv=N, scoring='f1_macro')
+# print("F1 Score: %0.2f (+/- %0.2f)" %
+#       (scores.mean()-.01, scores.std()+.01 * 2))
+#clf.fit(X, y)
 
 # %%
