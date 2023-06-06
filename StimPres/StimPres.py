@@ -231,14 +231,14 @@ def one_block(slides_place):
     board.stop_stream()
     
     ## IMPORTANT Change Initials for Each Test Subject
-    initials = 'QT'
+    initials = 'GT007'
 
     # Old Naming Convention:
     # naming_convention = initials + str(test_slides[slides_place][1]) + '_' + slides[slides_place][0]
     # Background Naming Convention
     # naming_convention = initials + '_' + str(slides_place) +'_BKGRD'
     # Current Naming Convention - NOTE DLR's 8th test currently
-    naming_convention = initials + '_' + str(slides_place) +'_4'
+    naming_convention = initials + '_' + str(slides_place) +'_3'
 
     # Print File
     DataFilter.write_file(data, naming_convention + '.txt', 'w')
