@@ -98,45 +98,46 @@ def fsClass(N,clf,X,y,featureNumber):
 
 
 
-def ghostFeatures(rawData, indVal, chanNum, fs, lowcut, highcut, pcti):
+def ghostFeatures(rawData, indVal, chanNum, fs, lowcut, highcut, pcti, windows):
     i1=np.squeeze(indVal[0])
     can1=int(chanNum)
     ses1=np.squeeze(rawData[i1[0]:i1[1],:])
     singChan=ses1[0::,can1]
-    w1=[0,fs]
-    w2=[fs,np.min([(2*fs-1),len(singChan)])]
-    f1a = featureExtraction(singChan[int(w1[0]):int(w1[1])], fs, lowcut, highcut, pcti)
-    f1b = featureExtraction(singChan[int(w2[0]):int(w2[1])], fs, lowcut, highcut, pcti)
-    f1=np.concatenate((f1a,f1b),axis=0)
+    #w1=[0,fs]
+    #w2=[fs,np.min([(2*fs-1),len(singChan)])]
+    #f1a = featureExtraction(singChan[int(w1[0]):int(w1[1])], fs, lowcut, highcut, pcti)
+    #f1b = featureExtraction(singChan[int(w2[0]):int(w2[1])], fs, lowcut, highcut, pcti)
+    f1=featureCreation(singChan, fs, lowcut, highcut, pcti, windows)
+    #f1=np.concatenate((f1a,f1b),axis=0)
     return(f1)
 
-def ghostHeap(rawData, indVal, fs, lowcut, highcut, pcti):
-    fa=ghostFeatures(rawData, indVal, 0, fs, lowcut, highcut, pcti)
-    fb=ghostFeatures(rawData, indVal, 1, fs, lowcut, highcut, pcti)
-    fc=ghostFeatures(rawData, indVal, 2, fs, lowcut, highcut, pcti)
-    fd=ghostFeatures(rawData, indVal, 3, fs, lowcut, highcut, pcti)
-    fe=ghostFeatures(rawData, indVal, 4, fs, lowcut, highcut, pcti)
-    ff=ghostFeatures(rawData, indVal, 5, fs, lowcut, highcut, pcti)
-    fg=ghostFeatures(rawData, indVal, 6, fs, lowcut, highcut, pcti)
-    fh=ghostFeatures(rawData, indVal, 7, fs, lowcut, highcut, pcti)
-    fi=ghostFeatures(rawData, indVal, 8, fs, lowcut, highcut, pcti)
-    fj=ghostFeatures(rawData, indVal, 9, fs, lowcut, highcut, pcti)
-    fk=ghostFeatures(rawData, indVal, 10, fs, lowcut, highcut, pcti)
-    fl=ghostFeatures(rawData, indVal, 11, fs, lowcut, highcut, pcti)
-    fm=ghostFeatures(rawData, indVal, 12, fs, lowcut, highcut, pcti)
-    fn=ghostFeatures(rawData, indVal, 13, fs, lowcut, highcut, pcti)
-    fo=ghostFeatures(rawData, indVal, 14, fs, lowcut, highcut, pcti)
-    fp=ghostFeatures(rawData, indVal, 15, fs, lowcut, highcut, pcti)
-    fq=ghostFeatures(rawData, indVal, 16, fs, lowcut, highcut, pcti)
+def ghostHeap(rawData, indVal, fs, lowcut, highcut, pcti, windows):
+    fa=ghostFeatures(rawData, indVal, 0, fs, lowcut, highcut, pcti, windows)
+    fb=ghostFeatures(rawData, indVal, 1, fs, lowcut, highcut, pcti, windows)
+    fc=ghostFeatures(rawData, indVal, 2, fs, lowcut, highcut, pcti, windows)
+    fd=ghostFeatures(rawData, indVal, 3, fs, lowcut, highcut, pcti, windows)
+    fe=ghostFeatures(rawData, indVal, 4, fs, lowcut, highcut, pcti, windows)
+    ff=ghostFeatures(rawData, indVal, 5, fs, lowcut, highcut, pcti, windows)
+    fg=ghostFeatures(rawData, indVal, 6, fs, lowcut, highcut, pcti, windows)
+    fh=ghostFeatures(rawData, indVal, 7, fs, lowcut, highcut, pcti, windows)
+    fi=ghostFeatures(rawData, indVal, 8, fs, lowcut, highcut, pcti, windows)
+    fj=ghostFeatures(rawData, indVal, 9, fs, lowcut, highcut, pcti, windows)
+    fk=ghostFeatures(rawData, indVal, 10, fs, lowcut, highcut, pcti, windows)
+    fl=ghostFeatures(rawData, indVal, 11, fs, lowcut, highcut, pcti, windows)
+    fm=ghostFeatures(rawData, indVal, 12, fs, lowcut, highcut, pcti, windows)
+    fn=ghostFeatures(rawData, indVal, 13, fs, lowcut, highcut, pcti, windows)
+    fo=ghostFeatures(rawData, indVal, 14, fs, lowcut, highcut, pcti, windows)
+    fp=ghostFeatures(rawData, indVal, 15, fs, lowcut, highcut, pcti, windows)
+    fq=ghostFeatures(rawData, indVal, 16, fs, lowcut, highcut, pcti, windows)
     fa1=np.concatenate((fa,fb,fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fm,fn,fo,fp,fq),axis=0)
     return(fa1)
 
-def ghostVector(rawData, fs, lowcut, highcut, pcti, h1, h2, h3, h4, h5):
-    f1=ghostHeap(rawData, h1, fs, lowcut, highcut, pcti)
-    f2=ghostHeap(rawData, h2, fs, lowcut, highcut, pcti)
-    f3=ghostHeap(rawData, h3, fs, lowcut, highcut, pcti)
-    f4=ghostHeap(rawData, h4, fs, lowcut, highcut, pcti)
-    f5=ghostHeap(rawData, h5, fs, lowcut, highcut, pcti)
+def ghostVector(rawData, fs, lowcut, highcut, pcti, h1, h2, h3, h4, h5, windows):
+    f1=ghostHeap(rawData, h1, fs, lowcut, highcut, pcti, windows)
+    f2=ghostHeap(rawData, h2, fs, lowcut, highcut, pcti, windows)
+    f3=ghostHeap(rawData, h3, fs, lowcut, highcut, pcti, windows)
+    f4=ghostHeap(rawData, h4, fs, lowcut, highcut, pcti, windows)
+    f5=ghostHeap(rawData, h5, fs, lowcut, highcut, pcti, windows)
     featureVector=np.concatenate((f1,f2,f3,f4,f5),axis=0)
     return(featureVector)
 
@@ -235,17 +236,17 @@ def featureCreation(data, fs, lowcut, highcut, pcti, windows):
     feature_vector = np.array([])
     seconds_per_window = np.floor(len(data)/fs) / windows
     window_length = np.floor(seconds_per_window * fs)
-    for i in range(16):
-        j=0
-        while j < len(data):
-            win_low = int(j)
-            win_high = int(j+window_length)
-            if win_high < len(data):
-                print(str(win_low) + ' ' + str(win_high))
-                current_data = data[win_low:win_high,i]
-                current_feature = featureExtraction(current_data, fs, lowcut, highcut, pcti)
-                feature_vector = np.hstack((feature_vector, current_feature))
-            j = j + window_length
+    
+    j=0
+    while j < len(data):
+        win_low = int(j)
+        win_high = int(j+window_length)
+        if win_high < len(data):
+            print(str(win_low) + ' ' + str(win_high))
+            current_data = data[win_low:win_high]
+            current_feature = featureExtraction(current_data, fs, lowcut, highcut, pcti)
+            feature_vector = np.hstack((feature_vector, current_feature))
+        j = j + window_length
         #for j in range(np.floor(len(data)/window_length)):
         #    window_low = ((j-1) / windows) * len(data)
         #    window_high = (j / windows) * len(data)
