@@ -231,6 +231,30 @@ def smooth(x, window_len=11, window='hanning'):
     y = np.convolve(w/w.sum(), s, mode='valid')
     return y
 
+def featureCreation(data, fs, lowcut, highcut, pcti, windows):
+    feature_vector = np.array([])
+    seconds_per_window = np.floor(len(data)/fs) / windows
+    window_length = np.floor(seconds_per_window * fs)
+    for i in range(16):
+        j=0
+        while j < len(data):
+            win_low = int(j)
+            win_high = int(j+window_length)
+            if win_high < len(data):
+                print(str(win_low) + ' ' + str(win_high))
+                current_data = data[win_low:win_high,i]
+                current_feature = featureExtraction(current_data, fs, lowcut, highcut, pcti)
+                feature_vector = np.hstack((feature_vector, current_feature))
+            j = j + window_length
+        #for j in range(np.floor(len(data)/window_length)):
+        #    window_low = ((j-1) / windows) * len(data)
+        #    window_high = (j / windows) * len(data)
+        #    current_data = data[:,i]
+        #    current_feature = featureExtraction(current_data, fs, lowcut, highcut, pcti)
+        #    feature_vector = np.hstack((feature_vector, current_feature))
+        
+    return feature_vector
+
 
 def featureExtraction(data, fs, lowcut, highcut, pcti):
     widths = np.arange(1, 31)
