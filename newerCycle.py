@@ -38,12 +38,22 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
+# for N-fold cross validation
 N=4
 
-X = np.genfromtxt('dlrData1.csv', delimiter=',')
-y = np.genfromtxt('dlrLabels1.csv', delimiter=',')
+X = np.genfromtxt('dlrData2.csv', delimiter=',')
+
+y = np.genfromtxt('dlrLabels2.csv', delimiter=',')
 print(np.shape(X))
 print(np.shape(y))
+X = X.astype(float)
+y = y.astype(int)
+
+X[np.isnan(X)] = 0
+X[np.isinf(X)] = 0
+
+y[np.isnan(y)] = 0
+y[np.isinf(y)] = 0
 
 lims=np.shape(X)
 x0=int(lims[0])

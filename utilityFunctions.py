@@ -31,8 +31,8 @@ def featureSelect(X, y, featureNumber, catToSearch):
 def speedClass(X1, X2):
     
     Xa = np.vstack([X1, X2])
-    t0 = 0*np.ones([1, len(X1)])
-    t1 = 1*np.ones([1, len(X2)])
+    t0 = 1*np.ones([1, len(X1)])
+    t1 = 0*np.ones([1, len(X2)])
     targets = np.hstack([t0, t1])
     ya = np.transpose(np.ravel(targets))
     return (Xa,ya)
@@ -262,6 +262,7 @@ def featureExtraction(data, fs, lowcut, highcut, pcti):
     data[np.isnan(data)] = 0
     data[np.isinf(data)] = 0
     intensityPcti = np.percentile(data, pcti)
+    dMean = np.mean(data)
     data = data-np.mean(data)
     data = smooth(data.flatten())
     data = butter_bandpass_filter(data, lowcut, highcut, fs, order=4)
@@ -279,7 +280,7 @@ def featureExtraction(data, fs, lowcut, highcut, pcti):
     # print(np.shape(peakFLoc))
     # print(np.shape(intensityPcti))
     featureVector = np.hstack(
-        (Psum.flatten(), vrms, peakF, peakFLoc, intensityPcti))
+        (Psum.flatten(), vrms, peakF, peakFLoc, dMean, intensityPcti))
     # print(featureVector)
     featureVector[np.isnan(featureVector)] = 0
     featureVector[np.isinf(featureVector)] = 0
