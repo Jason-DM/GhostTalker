@@ -96,6 +96,29 @@ def fsClass(N,clf,X,y,featureNumber):
     finalF1=np.mean(np.asarray(nuF1))
     return(finalAcc,finalF1,finalFeatures,finalLength)
 
+def pairLoader(subName):
+
+    outNamData=subName+'_Data.csv'
+    outNamLabels=subName+'_Labels.csv'
+    X = np.genfromtxt(outNamData, delimiter=',')
+    y = np.genfromtxt(outNamLabels, delimiter=',')
+
+    X = X.astype(float)
+    y = y.astype(int)
+
+    X[np.isnan(X)] = 0
+    X[np.isinf(X)] = 0
+
+    y[np.isnan(y)] = 0
+    y[np.isinf(y)] = 0
+
+    lims=np.shape(X)
+    x0=int(lims[0])
+    x1=int(lims[1])
+
+    X=np.squeeze(X[1:x0,1:x1])
+    runCats=np.squeeze(np.unique(y))
+    return(X,y)
 
 
 def ghostFeatures(rawData, indVal, chanNum, fs, lowcut, highcut, pcti, windows):
@@ -103,16 +126,16 @@ def ghostFeatures(rawData, indVal, chanNum, fs, lowcut, highcut, pcti, windows):
     can1=int(chanNum)
     ses1=np.squeeze(rawData[i1[0]:i1[1],:])
     singChan=ses1[0::,can1]
-    #w1=[0,fs]
-    #w2=[fs,np.min([(2*fs-1),len(singChan)])]
-    #f1a = featureExtraction(singChan[int(w1[0]):int(w1[1])], fs, lowcut, highcut, pcti)
-    #f1b = featureExtraction(singChan[int(w2[0]):int(w2[1])], fs, lowcut, highcut, pcti)
-    f1=featureCreation(singChan, fs, lowcut, highcut, pcti, windows)
-    #f1=np.concatenate((f1a,f1b),axis=0)
+    w1=[0,fs]
+    w2=[fs,np.min([(2*fs-1),len(singChan)])]
+    f1a = featureExtraction(singChan[int(w1[0]):int(w1[1])], fs, lowcut, highcut, pcti)
+    f1b = featureExtraction(singChan[int(w2[0]):int(w2[1])], fs, lowcut, highcut, pcti)
+    #f1=featureCreation(singChan, fs, lowcut, highcut, pcti, windows)
+    f1=np.concatenate((f1a,f1b),axis=0)
     return(f1)
 
 def ghostHeap(rawData, indVal, fs, lowcut, highcut, pcti, windows):
-    fa=ghostFeatures(rawData, indVal, 0, fs, lowcut, highcut, pcti, windows)
+ #   fa=ghostFeatures(rawData, indVal, 0, fs, lowcut, highcut, pcti, windows)
     fb=ghostFeatures(rawData, indVal, 1, fs, lowcut, highcut, pcti, windows)
     fc=ghostFeatures(rawData, indVal, 2, fs, lowcut, highcut, pcti, windows)
     fd=ghostFeatures(rawData, indVal, 3, fs, lowcut, highcut, pcti, windows)
@@ -129,7 +152,8 @@ def ghostHeap(rawData, indVal, fs, lowcut, highcut, pcti, windows):
     fo=ghostFeatures(rawData, indVal, 14, fs, lowcut, highcut, pcti, windows)
     fp=ghostFeatures(rawData, indVal, 15, fs, lowcut, highcut, pcti, windows)
     fq=ghostFeatures(rawData, indVal, 16, fs, lowcut, highcut, pcti, windows)
-    fa1=np.concatenate((fa,fb,fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fm,fn,fo,fp,fq),axis=0)
+    #fa1=np.concatenate((fa,fb,fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fm,fn,fo,fp,fq),axis=0)
+    fa1=np.concatenate((fb,fc,fd,fe,ff,fg,fh,fi,fj,fk,fl,fm,fn,fo,fp,fq),axis=0)
     return(fa1)
 
 def ghostVector(rawData, fs, lowcut, highcut, pcti, h1, h2, h3, h4, h5, windows):
@@ -288,7 +312,8 @@ def featureExtraction(data, fs, lowcut, highcut, pcti):
     return featureVector
 
 
-def balancedMatrix(a, totalLength):
+#def balancedMatrix(a, totalLength):
+def balMatrix(a, totalLength):
     maxLen = np.max(totalLength)
     minLen = np.min(totalLength)
     ratioL = np.floor(maxLen/minLen)
@@ -302,6 +327,16 @@ def balancedMatrix(a, totalLength):
         aTT = np.squeeze(aTT)
 
     aTT = aTT[0:(maxLen-1), :]
+    aTT = np.squeeze(aTT)
+    return (aTT)
+
+def balancedMatrix(a, totalLength):
+#def balMatrix(a, totalLength):
+    minLen = np.min(totalLength)
+    [xw,xh]=np.shape(a)
+    orders=np.random.permutation(xw)
+    truncatedOrd=np.squeeze(orders[0:minLen])
+    aTT = a[truncatedOrd, :]
     aTT = np.squeeze(aTT)
     return (aTT)
 
