@@ -46,9 +46,9 @@ N=4
 #print(np.shape(X))
 #print(np.shape(y))
 
-X = np.genfromtxt('allSubData.csv', delimiter=',')
+X = np.genfromtxt('allSub_Data.csv', delimiter=',')
 
-y = np.genfromtxt('allSubLabels.csv', delimiter=',')
+y = np.genfromtxt('allSub_Labels.csv', delimiter=',')
 print(np.shape(X))
 print(np.shape(y))
 X = X.astype(float)

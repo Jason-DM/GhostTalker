@@ -1,5 +1,5 @@
 # %%
-# Combine individual features into larger one
+# Combine individual participants' features into single large matrix, then export file
 
 import numpy as np
 import scipy as sp
@@ -8,7 +8,7 @@ import pandas as pd
 
 from utilityFunctions import pairLoader
 
-allSubNames=list(['GTP000','GTP003','GTP004','GTP007','GTP044','GTP045','GTP047','GTP104','GTP223','GTP303','GTP308','GTP455','GTP545','GTP556','GTP762','GTP765'])
+allSubNames=list(['GTP000','GTP003','GTP004','GTP007','GTP044','GTP045','GTP047','GTP104','GTP223','GTP303','GTP308','GTP455','GTP545','GTP556','GTP762','GTP765','allSub'])
 subName='GTP000'
 
 subNames=list(['GTP003','GTP004','GTP007','GTP044','GTP045','GTP047','GTP104','GTP223','GTP303','GTP308','GTP455','GTP545','GTP556','GTP762','GTP765'])

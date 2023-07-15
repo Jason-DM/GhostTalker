@@ -6,6 +6,9 @@ from scipy.signal import butter, lfilter, ricker
 import os
 import glob
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
 from sklearn.feature_selection import RFE
 from sklearn.svm import SVR
 
@@ -14,6 +17,25 @@ from sklearn import metrics
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import recall_score, precision_score, f1_score, accuracy_score
 from scipy.stats import stats
+
+
+def classOutputs(N,X,y,featureNumber):
+    clf = QuadraticDiscriminantAnalysis()
+    ca1finalAcc,ca1finalF1,finalFeatures,finalLength=dualClass(N,clf,X,y,featureNumber)
+    cb1fsAcc,cb1fsF1,finalFeatures,finalLength=fsClass(N,clf,X,y,featureNumber)
+
+    clf = GaussianNB()
+    ca2finalAcc,ca2finalF1,finalFeatures,finalLength=dualClass(N,clf,X,y,featureNumber)
+    cb2fsAcc,cb2fsF1,finalFeatures,finalLength=fsClass(N,clf,X,y,featureNumber)
+
+    clf = SVC(gamma=2, C=1)
+    ca3finalAcc,ca3finalF1,finalFeatures,finalLength=dualClass(N,clf,X,y,featureNumber)
+    cb3fsAcc,cb3fsF1,finalFeatures,finalLength=fsClass(N,clf,X,y,featureNumber)
+
+    clf = KNeighborsClassifier(n_neighbors=3)
+    ca4finalAcc,ca4finalF1,finalFeatures,finalLength=dualClass(N,clf,X,y,featureNumber)
+    cb4fsAcc,cb4fsF1,finalFeatures,finalLength=fsClass(N,clf,X,y,featureNumber)
+    return(ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF1)
 
 def featureSelect(X, y, featureNumber, catToSearch):
     locks1 = np.where(y==catToSearch)
