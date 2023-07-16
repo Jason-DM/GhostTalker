@@ -64,7 +64,7 @@ for subName in allSubNames:
 	[X,y]=pairLoader(subName)
 
 # classify data
-	ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF=classOutputs(N,X,y,featureNumber)
+	ca1finalAcc,ca1finalF1,cb1fsAcc,cb1fsF1,ca2finalAcc,ca2finalF1,cb2fsAcc,cb2fsF1,ca3finalAcc,ca3finalF1,cb3fsAcc,cb3fsF1,ca4finalAcc,ca4finalF1,cb4fsAcc,cb4fsF1=classOutputs(N,X,y,featureNumber)
 # qda list 
 	ca1AList.append(ca1finalAcc)
 	ca1FList.append(ca1finalF1)
